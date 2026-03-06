@@ -1,7 +1,6 @@
 using DevInsightForge.Application.DtoModels.Authentication;
 using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.Application.Results;
 using System.Security.Claims;
@@ -11,7 +10,6 @@ namespace DevInsightForge.Application.Features.Authentication.Commands;
 public sealed record RegisterUserCommand(RegisterUserDto Dto) : IRequest<RegisterUserCommand, Task<Result<TokenResponseModel>>>;
 
 internal sealed class RegisterUserCommandHandler(
-    IUserRepository userRepository,
     IEncryptionService encryptionService,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices,
@@ -27,9 +25,11 @@ internal sealed class RegisterUserCommandHandler(
 
         UserModel user = UserModel.CreateUser(request.Dto.Email);
         user.SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
-
-        await userRepository.AddAsync(user, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.WithTransaction(async ct =>
+        {
+            await unitOfWork.Users.AddAsync(user, ct);
+            await unitOfWork.SaveChangesAsync(ct);
+        }, cancellationToken);
 
         var claims = new List<Claim>
         {

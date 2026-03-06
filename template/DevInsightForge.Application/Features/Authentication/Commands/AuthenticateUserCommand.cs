@@ -1,7 +1,6 @@
 using DevInsightForge.Application.DtoModels.Authentication;
 using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Application.Results;
 using System.Security.Claims;
 
@@ -11,7 +10,6 @@ public sealed record AuthenticateUserCommand(AuthenticateUserDto Dto) : IRequest
 
 internal sealed class AuthenticateUserCommandHandler(
     IEncryptionService encryptionService,
-    IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices,
     IValidator<AuthenticateUserDto> authenticateUserDtoValidator) : IRequestHandler<AuthenticateUserCommand, Task<Result<TokenResponseModel>>>
@@ -25,7 +23,7 @@ internal sealed class AuthenticateUserCommandHandler(
         }
 
         var normalizedEmail = request.Dto.Email.ToUpperInvariant();
-        var user = await userRepository.GetWhereAsync(u => u.NormalizedEmail.Equals(normalizedEmail));
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.NormalizedEmail.Equals(normalizedEmail));
 
         if (user is null || !encryptionService.VerifyPassword(user.PasswordHash, request.Dto.Password))
         {
@@ -34,8 +32,11 @@ internal sealed class AuthenticateUserCommandHandler(
         }
 
         user.UpdateLastLogin();
-        await userRepository.UpdateAsync(user, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.WithTransaction(async ct =>
+        {
+            await unitOfWork.Users.UpdateAsync(user, ct);
+            await unitOfWork.SaveChangesAsync(ct);
+        }, cancellationToken);
 
         var claims = new List<Claim>
         {

@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
+using DevInsightForge.Application.Abstructions.DataAccess;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,11 +15,11 @@ public class RegisterUserDto
 
 public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RegisterUserDtoValidator(IUserRepository userRepository)
+    public RegisterUserDtoValidator(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
 
         RuleFor(dto => dto.Email)
             .NotEmpty().WithMessage("Email is required.")
@@ -35,7 +35,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 
     private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
     {
-        return !await _userRepository.AnyAsync(u => u.Email == email);
+        return !await _unitOfWork.Users.AnyAsync(u => u.Email == email);
     }
 }
 
