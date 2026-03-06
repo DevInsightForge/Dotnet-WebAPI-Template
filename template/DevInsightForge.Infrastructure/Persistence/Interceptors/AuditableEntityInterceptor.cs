@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DevInsightForge.Infrastructure.Persistence.Interceptors;
 
-public class AuditableEntityInterceptor(IAuthenticatedUser authenticatedUser) : SaveChangesInterceptor
+public class AuditableEntityInterceptor(IRequestContextService requestContext) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -22,19 +22,19 @@ public class AuditableEntityInterceptor(IAuthenticatedUser authenticatedUser) : 
 
     private void UpdateEntities(DbContext? context)
     {
-        if (context is null || authenticatedUser?.UserId is null)
+        if (context is null || requestContext?.RequestUserId is null)
             return;
 
         foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.SetCreationAudit(authenticatedUser.UserId);
+                entry.Entity.SetCreationAudit(requestContext.RequestUserId);
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.SetModificationAudit(authenticatedUser.UserId);
+                entry.Entity.SetModificationAudit(requestContext.RequestUserId);
             }
         }
     }

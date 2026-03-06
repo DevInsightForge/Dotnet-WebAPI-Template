@@ -1,14 +1,12 @@
 using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
-using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.Infrastructure.Configurations.Settings;
 using DevInsightForge.Infrastructure.DataAccess;
 using DevInsightForge.Infrastructure.DataAccess.Repositories;
 using DevInsightForge.Infrastructure.Persistence;
 using DevInsightForge.Infrastructure.Persistence.Interceptors;
 using DevInsightForge.Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -38,8 +36,7 @@ public static class InfrastructureServices
         services.AddScoped<IUserRepository, UserRepository>();
 
         // Register infrastructure implementations
-        services.AddScoped<IPasswordHasher<UserModel>, PasswordHasher<UserModel>>();
-        services.AddScoped<IPasswordHashService, PasswordHashService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
         services.AddScoped<ITokenService, TokenServices>();
     }
 }

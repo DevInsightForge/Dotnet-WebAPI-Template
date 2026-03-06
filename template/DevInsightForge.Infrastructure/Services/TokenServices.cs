@@ -12,15 +12,11 @@ public class TokenServices(IOptions<JwtSettings> jwtSettings) : ITokenService
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
-    public (string AccessToken, DateTime AccessTokenExpiresAt) GenerateJwtToken(Guid userId)
+    public (string token, DateTime expiry) GenerateJwtToken(List<Claim> claims)
     {
         var accessTokenExpiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes);
-
-        var authClaims = new List<Claim>
-        {
-            new(JwtRegisteredClaimNames.Sid, userId.ToString(), ClaimValueTypes.Sid),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+        var tokenClaims = claims.Where(c => c.Type != JwtRegisteredClaimNames.Jti).ToList();
+        tokenClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.CreateVersion7().ToString()));
 
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
 
@@ -28,7 +24,7 @@ public class TokenServices(IOptions<JwtSettings> jwtSettings) : ITokenService
             issuer: _jwtSettings.ValidIssuer,
             audience: _jwtSettings.ValidAudience,
             expires: accessTokenExpiresAt,
-            claims: authClaims,
+            claims: tokenClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
         );
 

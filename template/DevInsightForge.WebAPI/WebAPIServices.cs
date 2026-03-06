@@ -29,7 +29,7 @@ public static class WebAPIServices
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
 
         // Register WebAPI-specific context services
-        services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
+        services.AddScoped<IRequestContextService, RequestContextService>();
     }
 
     public static void UseWebAPIServices(this WebApplication app)

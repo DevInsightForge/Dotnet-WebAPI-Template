@@ -4,6 +4,7 @@ using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.Application.Results;
+using System.Security.Claims;
 
 namespace DevInsightForge.Application.Features.Authentication.Commands;
 
@@ -11,7 +12,7 @@ public sealed record RegisterUserCommand(RegisterUserDto Dto) : IRequest<Registe
 
 internal sealed class RegisterUserCommandHandler(
     IUserRepository userRepository,
-    IPasswordHashService passwordHashService,
+    IEncryptionService encryptionService,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices,
     IValidator<RegisterUserDto> registerUserDtoValidator) : IRequestHandler<RegisterUserCommand, Task<Result<TokenResponseModel>>>
@@ -25,12 +26,17 @@ internal sealed class RegisterUserCommandHandler(
         }
 
         UserModel user = UserModel.CreateUser(request.Dto.Email);
-        user.SetPasswordHash(passwordHashService.HashPassword(user, request.Dto.Password));
+        user.SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
 
         await userRepository.AddAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var (accessToken, accessTokenExpiresAt) = tokenServices.GenerateJwtToken(user.Id);
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Sid, user.Id.ToString(), ClaimValueTypes.Sid)
+        };
+
+        var (accessToken, accessTokenExpiresAt) = tokenServices.GenerateJwtToken(claims);
 
         return Result<TokenResponseModel>.Created(new TokenResponseModel()
         {

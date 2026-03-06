@@ -10,17 +10,17 @@ public sealed record GetTokenUserQuery : IRequest<GetTokenUserQuery, Task<Result
 
 internal sealed class GetTokenUserQueryHandler(
     IUserRepository userRepository,
-    IAuthenticatedUser authenticatedUser) : IRequestHandler<GetTokenUserQuery, Task<Result<UserResponseModel>>>
+    IRequestContextService requestContext) : IRequestHandler<GetTokenUserQuery, Task<Result<UserResponseModel>>>
 {
     public async Task<Result<UserResponseModel>> Handle(GetTokenUserQuery request, CancellationToken cancellationToken)
     {
-        if (authenticatedUser.UserId is null)
+        if (requestContext.RequestUserId is null)
         {
             return Result<UserResponseModel>.Failure(
                 new Error("auth.unauthorized", "Unauthorized request.", ErrorType.Unauthorized));
         }
 
-        UserModel? user = await userRepository.GetWhereAsync(u => u.Id.Equals(authenticatedUser.UserId));
+        UserModel? user = await userRepository.GetWhereAsync(u => u.Id.Equals(requestContext.RequestUserId));
         return user is null
             ? Result<UserResponseModel>.Failure(new Error("user.not_found", "Token user is not found.", ErrorType.NotFound))
             : Result<UserResponseModel>.Success(user.Adapt<UserResponseModel>());
