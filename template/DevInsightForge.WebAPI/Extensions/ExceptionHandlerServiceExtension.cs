@@ -1,54 +1,26 @@
-﻿using DevInsightForge.Application.Common.Exceptions;
+﻿using DevInsightForge.WebAPI.Common.Models;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace DevInsightForge.WebAPI.Extensions;
 
-internal sealed class ExceptionHandlerServiceExtension : IExceptionHandler
+internal sealed class ExceptionHandlerServiceExtension(ILogger<ExceptionHandlerServiceExtension> logger) : IExceptionHandler
 {
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception rawException, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception rawException, CancellationToken ct)
     {
-        ProblemDetails problemDetails = new()
+        logger.LogError(rawException, "Unhandled exception while processing {Path}", httpContext.Request.Path);
+
+        const int statusCode = StatusCodes.Status500InternalServerError;
+        var apiResponse = new ApiResponse
         {
-            Instance = httpContext.Request.Path
+            StatusCode = statusCode,
+            Message = ["An unexpected error occurred."]
         };
 
-        switch (rawException)
-        {
-            case BadRequestException exception:
-                problemDetails.Status = StatusCodes.Status400BadRequest;
-                problemDetails.Title = "Bad Request";
-                problemDetails.Detail = exception.Message.ToString();
-                break;
-
-            case NotFoundException exception:
-                problemDetails.Status = StatusCodes.Status404NotFound;
-                problemDetails.Title = "Not Found";
-                problemDetails.Detail = exception.Message.ToString();
-                break;
-
-            case FluentValidation.ValidationException exception:
-                problemDetails.Status = StatusCodes.Status400BadRequest;
-                problemDetails.Title = "Validation Failed";
-                problemDetails.Detail = "One or more validation errors occurred.";
-
-                problemDetails.Extensions["errors"] = exception.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                        group => JsonNamingPolicy.CamelCase.ConvertName(group.Key) ?? group.Key,
-                        group => group.Select(e => e.ErrorMessage).ToArray());
-                break;
-
-            default:
-                problemDetails.Status = StatusCodes.Status500InternalServerError;
-                problemDetails.Title = "Internal Server Error";
-                break;
-        }
-
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        httpContext.Response.StatusCode = statusCode;
+        await httpContext.Response.WriteAsJsonAsync(apiResponse, ct);
 
         return true;
     }
 }
+
+

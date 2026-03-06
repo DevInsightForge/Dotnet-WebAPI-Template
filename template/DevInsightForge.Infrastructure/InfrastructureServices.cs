@@ -1,11 +1,7 @@
-﻿using DevInsightForge.Application.Common.Interfaces.DataAccess;
-using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
-using DevInsightForge.Infrastructure.DataAccess;
-using DevInsightForge.Infrastructure.DataAccess.Repositories;
-using DevInsightForge.Infrastructure.Persistence;
-using DevInsightForge.Infrastructure.Persistence.Interceptors;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Infrastructure.Configurations;
+using DevInsightForge.Infrastructure.ExternalServices;
+using DevInsightForge.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,22 +9,25 @@ namespace DevInsightForge.Infrastructure;
 
 public static class InfrastructureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Configure DbContext provider
-        services.AddDbContext<DatabaseContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(configuration.GetConnectionString("DatabaseServer"));
-        });
+        // Configure and validate JWT settings at startup
+        services.AddOptions<JwtConfigurations>()
+            .Bind(configuration.GetSection("JwtConfigurations"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
-        // Configure DbContext interceptor
-        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+        // Configure and validate email settings at startup
+        services.AddOptions<EmailConfigurations>()
+            .Bind(configuration.GetSection("EmailSetting"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
-        // Register data-access services
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
-
-        return services;
+        // Register infrastructure implementations
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<ITokenService, TokenServices>();
+        services.AddScoped<IEmailService, EmailService>();
     }
 }
+
+

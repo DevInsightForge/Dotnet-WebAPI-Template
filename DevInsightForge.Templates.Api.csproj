@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageType>Template</PackageType>
+    <PackageId>DevInsightForge.Templates.Api</PackageId>
+    <PackageVersion>4.0.0</PackageVersion>
+    <Title>DevInsightForge Web API Template</Title>
+    <Authors>Mofajjal Rasul</Authors>
+    <Description>Template for a DevInsightForge Web API project.</Description>
+    <PackageTags>dotnet-new;template;webapi;clean-architecture;csharp</PackageTags>
+    <PackageProjectUrl>https://github.com/DevInsightForge/DotNetDevForgeTemplate</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DevInsightForge/DotNetDevForgeTemplate.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="template\**\*"
+             Exclude="template\**\.vs\**;template\**\bin\**;template\**\obj\**;template\**\*.dll;template\**\*.designer.cs;template\**\*.pdb;template\**\*.sqlite;template\**\*.user;template\**\*.vspscc"
+             PackagePath="content\template\" />
+    <Content Include=".template.config\**\*"
+             PackagePath="content\template\.template.config\" />
+    <None Include="README.md"
+          Pack="true"
+          PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*" />
+  </ItemGroup>
+</Project>

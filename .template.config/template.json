@@ -1,45 +1,57 @@
 {
-  "$schema": "http://json.schemastore.org/template",
+  "$schema": "https://json.schemastore.org/template",
   "author": "Mofajjal Rasul",
-  "classifications": ["Api"],
   "name": "DevInsightForge Web API Template",
+  "description": "Template for a DevInsightForge Web API project with Clean Architecture, MediatR, EF Core, and JWT authentication.",
   "identity": "DevInsightForge.Templates.Api",
-  "description": "Template for a DevInsightForge Web API project.",
-  "copyright": "Copyright 2023 DevInsightForge",
-  "version": "1.0.0",
+  "groupIdentity": "DevInsightForge.Templates.Api",
+  "version": "4.0.0",
   "shortName": "devforgeapi",
+  "defaultName": "DevInsightForge",
+  "precedence": 100,
+  "classifications": [
+    "Web",
+    "API",
+    "Clean Architecture",
+    "DDD",
+    "MediatR",
+    "EF Core",
+    "JWT"
+  ],
   "tags": {
     "language": "C#",
     "type": "project"
   },
   "sourceName": "DevInsightForge",
   "preferNameDirectory": true,
-  "guids": [
-    "2B9E919F-D63B-4243-9680-3D645EC87ABF",
-    "222CA023-1A21-4B91-A6D2-A22807A30D39",
-    "7FDF99C7-FC2B-40A2-91BF-D95B2740F9FD",
-    "303B8158-2B31-45D9-8F6B-CC11BC872FE5",
-    "A6C32FD0-C25C-4EB7-AB08-571618DB7D5E"
-  ],
-  "license": {
-    "type": "MIT",
-    "url": "https://opensource.org/licenses/MIT"
-  },
-  "repository": {
-    "url": "https://github.com/DevInsightForge/DotNetDevForgeTemplate",
-    "type": "git",
-    "branch": "main"
-  },
-  "templateData": [
+  "primaryOutputs": [
     {
-      "name": "DevInsightForge",
-      "description": "DevInsightForge: Debugging Dungeon"
+      "path": "DevInsightForge.sln"
     }
   ],
-  "templateTags": [
+  "sources": [
     {
-      "name": "dotnet",
-      "tags": ["api", "web", "c#"]
+      "modifiers": [
+        {
+          "exclude": [
+            "**/[Bb]in/**",
+            "**/[Oo]bj/**",
+            ".vs/**"
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "constraints": {
+    "minimumSdk": {
+      "type": "host",
+      "args": [
+        {
+          "hostname": "dotnetcli",
+          "version": "[10.0.100,)"
+        }
+      ]
+    }
+  },
+  "guids": []
 }

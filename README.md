@@ -13,6 +13,12 @@ This template provides a foundation for building a DevInsightForge Web API proje
 
 This template serves as a starting point for a DevInsightForge Web API project. It includes essential structures and configurations to kickstart your development process.
 
+## License and Policy
+
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Source and package metadata include MIT license declaration and repository attribution.
+- Usage policy: this template is provided "as is" under MIT terms. You are responsible for validating security, compliance, and legal requirements before production use.
+
 ## Features
 
 - ASP.NET Core Web API project
@@ -26,8 +32,12 @@ This template serves as a starting point for a DevInsightForge Web API project. 
 
 ## Prerequisites
 
-- [.NET SDK 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-- [Microsoft Visual Studio 2022 - Version 17.8.0+](https://visualstudio.microsoft.com/downloads)
+- [.NET SDK 10.0+ (LTS)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- `dotnet-ef` tool (for .NET CLI migration commands):
+
+```bash
+dotnet tool install --global dotnet-ef
+```
 
 ## Installation
 
@@ -35,6 +45,12 @@ To install the DevInsightForge Web API Template, use the following command:
 
 ```bash
 dotnet new install DevInsightForge.Templates.Api
+```
+
+For local development, install from this repository root:
+
+```bash
+dotnet new install .
 ```
 
 ## Create Solution Using Template
@@ -45,18 +61,42 @@ To create a new solution using the DevInsightForge Web API Template, use the fol
 dotnet new devforgeapi -n YourSolutionNameHere
 ```
 
+## Pack Template (Maintainers)
+
+Build a template package using the SDK-style pack project:
+
+```bash
+dotnet pack DevInsightForge.Templates.Api.csproj -c Release
+```
+
 ## Manage Migrations
 
-To execute migration commands, select [YourProjectName].Infrastructure project in Package Manager Console first.
+Use either .NET CLI or Package Manager Console.
 
-Run this to apply migrations first time.
+### Apply Migrations
+
+.NET CLI:
+
+```bash
+dotnet ef database update --project .\YourProjectName.Infrastructure --startup-project .\YourProjectName.WebAPI
+```
+
+Package Manager Console (select `YourProjectName.Infrastructure` as Default Project):
 
 ```bash
 Update-Database
 ```
 
-If runs into any error even with infra as selected project, remove Migration directory from Infrastructure and execute add new migration command.
+### Add New Migration
+
+.NET CLI:
 
 ```bash
-Add-Migration [Your-Migration-Name]
+dotnet ef migrations add InitialCreate --project .\YourProjectName.Infrastructure --startup-project .\YourProjectName.WebAPI
+```
+
+Package Manager Console (select `YourProjectName.Infrastructure` as Default Project):
+
+```bash
+Add-Migration InitialCreate
 ```

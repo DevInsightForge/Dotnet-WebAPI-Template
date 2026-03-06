@@ -1,14 +1,22 @@
-﻿using DevInsightForge.WebAPI.Extensions;
+using DevInsightForge.Application.Abstructions.Core;
+using DevInsightForge.WebAPI.Common.Filters;
+using DevInsightForge.WebAPI.Extensions;
+using DevInsightForge.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace DevInsightForge.WebAPI;
 
 public static class WebAPIServices
 {
-    public static IServiceCollection AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Inject Controller Handlers
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<ModelStateValidationFilter>();
+        });
+        services.AddHttpContextAccessor();
 
         // Disable inbuild model validators in favor of Fluent Validation
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -21,6 +29,29 @@ public static class WebAPIServices
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
         services.AddProblemDetails();
 
-        return services;
+        // Register WebAPI-specific context services
+        services.AddScoped<IRequestContextService, RequestContextService>();
+    }
+
+    public static void UseWebAPIServices(this WebApplication app)
+    {
+        // Configure App Pipelines
+        app.UseExceptionHandler();
+        app.UseSerilogRequestLogging();
+
+        if (app.Environment.IsDevelopment())
+            app.UseSwaggerService();
+
+        app.UseHttpsRedirection();
+        app.UseCors();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers()
+           .RequireAuthorization();
     }
 }
+
+
+

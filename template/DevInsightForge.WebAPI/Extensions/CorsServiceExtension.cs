@@ -1,4 +1,4 @@
-﻿namespace DevInsightForge.WebAPI.Extensions;
+namespace DevInsightForge.WebAPI.Extensions;
 
 public static class CorsServiceExtension
 {
@@ -10,8 +10,7 @@ public static class CorsServiceExtension
             options.AddDefaultPolicy(builder => builder
                     .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                    .AllowAnyHeader());
         });
 
         return services;

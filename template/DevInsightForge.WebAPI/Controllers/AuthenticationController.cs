@@ -1,34 +1,59 @@
-﻿using DevInsightForge.Application.Authentication.Commands.AuthenticateUser;
-using DevInsightForge.Application.Authentication.Commands.RegisterUser;
-using DevInsightForge.Application.Authentication.Queries.GetTokenUser;
-using DevInsightForge.Application.Common.ViewModels.Authentication;
-using DevInsightForge.Application.Common.ViewModels.User;
+using DevInsightForge.Application.DtoModels.Authentication;
+using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Features.Authentication.Commands;
+using DevInsightForge.Application.Features.Authentication.Queries;
+using DevInsightForge.WebAPI.Common.Mappings;
+using DevInsightForge.WebAPI.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevInsightForge.WebAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
-public class AuthenticationController(ISender sender) : ControllerBase
+public class AuthenticationController(IMediator mediator) : ControllerBase
 {
-    [HttpGet(nameof(GetTokenUser))]
-    public async Task<UserResponseModel> GetTokenUser()
+    [AllowAnonymous]
+    [HttpPost]
+    [ProducesResponseType<ApiResponse>(StatusCodes.Status201Created)]
+    public async Task<IActionResult> Register(RegisterRequestDto dto, CancellationToken ct)
     {
-        return await sender.Send(new GetTokenUserQuery());
+        var result = await mediator.Send(new RegisterCommand(dto), ct);
+        return result.ToApiResponse();
     }
 
     [AllowAnonymous]
-    [HttpPost(nameof(RegisterUser))]
-    public async Task<TokenResponseModel> RegisterUser(RegisterUserCommand command)
+    [HttpPost]
+    [ProducesResponseType<ApiResponse<AuthSessionResponseDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Login(LoginRequestDto dto, CancellationToken ct)
     {
-        return await sender.Send(command);
+        var result = await mediator.Send(new LoginCommand(dto), ct);
+        return result.ToApiResponse();
     }
 
     [AllowAnonymous]
-    [HttpPost(nameof(AuthenticateUser))]
-    public async Task<TokenResponseModel> AuthenticateUser(AuthenticateUserCommand command)
+    [HttpPost]
+    [ProducesResponseType<ApiResponse>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerifyEmailOtp(VerifyEmailOtpRequestDto dto, CancellationToken ct)
     {
-        return await sender.Send(command);
+        var result = await mediator.Send(new VerifyEmailOtpCommand(dto), ct);
+        return result.ToApiResponse();
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [ProducesResponseType<ApiResponse>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ResendEmailVerificationOtp(ResendEmailVerificationOtpRequestDto dto, CancellationToken ct)
+    {
+        var result = await mediator.Send(new ResendEmailVerificationOtpCommand(dto), ct);
+        return result.ToApiResponse();
+    }
+
+    [HttpGet]
+    [ProducesResponseType<ApiResponse<UserResponseModel>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken ct)
+    {
+        var result = await mediator.Send(new GetCurrentUserQuery(), ct);
+        return result.ToApiResponse();
     }
 }
