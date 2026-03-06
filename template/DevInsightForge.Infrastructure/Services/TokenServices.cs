@@ -1,5 +1,5 @@
 using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Infrastructure.Configurations.Settings;
+using DevInsightForge.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,9 +8,9 @@ using System.Text;
 
 namespace DevInsightForge.Infrastructure.Services;
 
-public class TokenServices(IOptions<JwtSettings> jwtSettings) : ITokenService
+public class TokenServices(IOptions<JwtConfigurations> jwtSettings) : ITokenService
 {
-    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+    private readonly JwtConfigurations _jwtSettings = jwtSettings.Value;
 
     public (string token, DateTime expiry) GenerateJwtToken(List<Claim> claims)
     {

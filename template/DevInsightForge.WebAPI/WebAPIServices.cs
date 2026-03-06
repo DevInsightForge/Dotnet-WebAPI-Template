@@ -47,7 +47,8 @@ public static class WebAPIServices
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapControllers();
+        app.MapControllers()
+           .RequireAuthorization();
     }
 }
 
