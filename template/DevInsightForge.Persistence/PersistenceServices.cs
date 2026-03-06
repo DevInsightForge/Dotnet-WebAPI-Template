@@ -16,7 +16,8 @@ public static class PersistenceServices
         services.AddDbContext<DatabaseContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<AuditableEntityInterceptor>());
-            options.UseNpgsql(configuration.GetConnectionString("DatabaseServer"));
+            options.UseNpgsql(configuration.GetConnectionString("DatabaseServer"),
+                npgsql => npgsql.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName));
         });
 
         // Register data-access services
