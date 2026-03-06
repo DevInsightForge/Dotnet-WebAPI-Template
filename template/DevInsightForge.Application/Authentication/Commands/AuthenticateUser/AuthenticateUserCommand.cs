@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.Configurations.Settings;
+using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Exceptions;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.Interfaces.DataAccess;
@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DevInsightForge.Application.Authentication.Commands.AuthenticateUser;
 
-public sealed record AuthenticateUserCommand : IRequest<TokenResponseModel>
+public sealed record AuthenticateUserCommand : IRequest<AuthenticateUserCommand, Task<TokenResponseModel>>
 {
     [EmailAddress]
     public string Email { get; set; } = string.Empty;
@@ -26,7 +26,7 @@ internal sealed class AuthenticateUserCommandHandler(
     IOptions<JwtSettings> jwtSettings,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
-    ITokenService tokenServices) : IRequestHandler<AuthenticateUserCommand, TokenResponseModel>
+    ITokenService tokenServices) : IRequestHandler<AuthenticateUserCommand, Task<TokenResponseModel>>
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
@@ -58,3 +58,4 @@ internal sealed class AuthenticateUserCommandHandler(
         };
     }
 }
+

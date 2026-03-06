@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.Configurations.Settings;
+using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.Interfaces.DataAccess;
 using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DevInsightForge.Application.Authentication.Commands.RegisterUser;
 
-public sealed record RegisterUserCommand : IRequest<TokenResponseModel>
+public sealed record RegisterUserCommand : IRequest<RegisterUserCommand, Task<TokenResponseModel>>
 {
     [EmailAddress]
     public string Email { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ internal sealed class RegisterUserCommandHandler(
     IPasswordHasher<UserModel> passwordHasher,
     IOptions<JwtSettings> jwtSettings,
     IUnitOfWork unitOfWork,
-    ITokenService tokenServices) : IRequestHandler<RegisterUserCommand, TokenResponseModel>
+    ITokenService tokenServices) : IRequestHandler<RegisterUserCommand, Task<TokenResponseModel>>
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
@@ -52,3 +52,4 @@ internal sealed class RegisterUserCommandHandler(
         };
     }
 }
+

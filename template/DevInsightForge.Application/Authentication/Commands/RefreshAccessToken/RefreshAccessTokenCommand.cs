@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.Configurations.Settings;
+using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Exceptions;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.ViewModels.Authentication;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace DevInsightForge.Application.Authentication.Commands.RefreshAccessToken;
 
-public sealed record RefreshAccessTokenCommand : IRequest<TokenResponseModel>
+public sealed record RefreshAccessTokenCommand : IRequest<RefreshAccessTokenCommand, Task<TokenResponseModel>>
 {
     public string RefreshToken { get; set; } = string.Empty;
 }
@@ -14,7 +14,7 @@ public sealed record RefreshAccessTokenCommand : IRequest<TokenResponseModel>
 internal sealed class RefreshAccessTokenCommandHandler(
     IOptions<JwtSettings> jwtSettings,
     ITokenService tokenServices)
-    : IRequestHandler<RefreshAccessTokenCommand, TokenResponseModel>
+    : IRequestHandler<RefreshAccessTokenCommand, Task<TokenResponseModel>>
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 

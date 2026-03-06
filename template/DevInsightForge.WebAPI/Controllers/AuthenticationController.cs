@@ -11,32 +11,32 @@ namespace DevInsightForge.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthenticationController(ISender sender) : ControllerBase
+public class AuthenticationController(IMediator mediator) : ControllerBase
 {
     [HttpGet(nameof(GetTokenUser))]
-    public async Task<UserResponseModel> GetTokenUser()
+    public async Task<UserResponseModel> GetTokenUser(CancellationToken cancellationToken)
     {
-        return await sender.Send(new GetTokenUserQuery());
+        return await mediator.Send(new GetTokenUserQuery(), cancellationToken);
     }
 
     [AllowAnonymous]
     [HttpPost(nameof(RegisterUser))]
-    public async Task<TokenResponseModel> RegisterUser(RegisterUserCommand command)
+    public async Task<TokenResponseModel> RegisterUser(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await mediator.Send(command, cancellationToken);
     }
 
     [AllowAnonymous]
     [HttpPost(nameof(AuthenticateUser))]
-    public async Task<TokenResponseModel> AuthenticateUser(AuthenticateUserCommand command)
+    public async Task<TokenResponseModel> AuthenticateUser(AuthenticateUserCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await mediator.Send(command, cancellationToken);
     }
 
     [AllowAnonymous]
     [HttpPost(nameof(RefreshAccessToken))]
-    public async Task<TokenResponseModel> RefreshAccessToken(RefreshAccessTokenCommand command)
+    public async Task<TokenResponseModel> RefreshAccessToken(RefreshAccessTokenCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await mediator.Send(command, cancellationToken);
     }
 }

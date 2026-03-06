@@ -1,9 +1,9 @@
-﻿using DevInsightForge.Application.Common.Behaviours;
 using DevInsightForge.Application.Common.Configurations.Mapster;
 using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.Interfaces.Core;
 using DevInsightForge.Application.Common.Services;
+using DispatchR.Extensions;
 using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.WebAPI.Services;
 using FluentValidation.AspNetCore;
@@ -18,13 +18,8 @@ public static class ApplicationServices
 {
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Inject and Configure Mediatr
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(ApplicationServices).Assembly);
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-        });
+        // Inject and Configure DispatchR
+        services.AddDispatchR(typeof(ApplicationServices).Assembly);
 
         // Bind Settings from configurations
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
@@ -49,3 +44,5 @@ public static class ApplicationServices
         services.AddScoped<ITokenService, TokenServices>();
     }
 }
+
+
