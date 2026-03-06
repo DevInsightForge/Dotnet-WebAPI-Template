@@ -12,6 +12,8 @@ public static class PersistenceServices
 {
     public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<AuditableEntityInterceptor>();
+
         // Configure DbContext provider
         services.AddDbContext<DatabaseContext>((sp, options) =>
         {

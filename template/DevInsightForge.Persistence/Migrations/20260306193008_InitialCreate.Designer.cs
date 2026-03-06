@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DevInsightForge.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260306181259_InitialCreate")]
+    [Migration("20260306193008_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -29,12 +29,6 @@ namespace DevInsightForge.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
-
-                    b.Property<Guid>("CreatedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateJoined")
                         .HasColumnType("timestamp with time zone");
@@ -55,12 +49,6 @@ namespace DevInsightForge.Persistence.Migrations
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ModifiedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -73,10 +61,6 @@ namespace DevInsightForge.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("ModifiedByUserId");
-
                     b.HasIndex("NormalizedEmail")
                         .IsUnique();
 
@@ -86,36 +70,13 @@ namespace DevInsightForge.Persistence.Migrations
                         new
                         {
                             Id = new Guid("019cc42b-1d4a-7e16-886c-5267c7e96651"),
-                            CreatedByUserId = new Guid("019cc42b-1d4a-7e16-886c-5267c7e96651"),
-                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DateJoined = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@default.local",
                             IsEmailVerified = true,
                             LastLogin = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ModifiedByUserId = new Guid("019cc42b-1d4a-7e16-886c-5267c7e96651"),
-                            ModifiedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             NormalizedEmail = "ADMIN@DEFAULT.LOCAL",
                             PasswordHash = "$argon2id$v=19$m=65536,t=3,p=1$Xka0Ez/kddlgKLbErxj7Ng$mBT9xHzRHIhVfsL3kV79DzB2TIL/mMhXp5SbVHBMzTc"
                         });
-                });
-
-            modelBuilder.Entity("DevInsightForge.Domain.Entities.UserModel", b =>
-                {
-                    b.HasOne("DevInsightForge.Domain.Entities.UserModel", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DevInsightForge.Domain.Entities.UserModel", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("ModifiedByUser");
                 });
 #pragma warning restore 612, 618
         }

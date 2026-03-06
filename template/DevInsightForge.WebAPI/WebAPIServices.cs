@@ -27,6 +27,7 @@ public static class WebAPIServices
         services.AddCorsService();
 
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
+        services.AddProblemDetails();
 
         // Register WebAPI-specific context services
         services.AddScoped<IRequestContextService, RequestContextService>();

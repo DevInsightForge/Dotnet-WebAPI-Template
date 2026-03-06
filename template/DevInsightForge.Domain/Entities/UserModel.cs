@@ -2,7 +2,7 @@ using DevInsightForge.Domain.Entities.Base;
 
 namespace DevInsightForge.Domain.Entities;
 
-public class UserModel : BaseAuditableEntity
+public class UserModel : BaseEntity
 {
     public string Email { get; private set; } = string.Empty;
     public string NormalizedEmail { get; private set; } = string.Empty;

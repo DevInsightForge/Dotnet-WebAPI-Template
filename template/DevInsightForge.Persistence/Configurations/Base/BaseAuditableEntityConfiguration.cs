@@ -4,21 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DevInsightForge.Persistence.Configurations.Base;
 
-public abstract class BaseAuditableEntityConfiguration<TBase> : IEntityTypeConfiguration<TBase>
+public abstract class BaseAuditableEntityConfiguration<TBase> : BaseEntityConfiguration<TBase>
 where TBase : BaseAuditableEntity
 {
-    public virtual void Configure(EntityTypeBuilder<TBase> builder)
+    public override void Configure(EntityTypeBuilder<TBase> builder)
     {
-        builder.HasKey(t => t.Id);
-
-        builder.Property(t => t.Id)
-            .ValueGeneratedNever();
-
-        builder.Property(t => t.IsDeleted)
-            .IsRequired()
-            .HasDefaultValue(false);
-
-        builder.HasQueryFilter(t => !t.IsDeleted);
+        base.Configure(builder);
 
         builder.HasOne(t => t.CreatedByUser)
             .WithMany()
