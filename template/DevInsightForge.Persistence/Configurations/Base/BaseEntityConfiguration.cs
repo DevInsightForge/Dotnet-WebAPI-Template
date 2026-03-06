@@ -1,8 +1,8 @@
-using DevInsightForge.Domain.Entities.Common;
+using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DevInsightForge.Persistence.Persistence.Configurations.Common;
+namespace DevInsightForge.Persistence.Configurations.Base;
 
 public abstract class BaseEntityConfiguration<TBase> : IEntityTypeConfiguration<TBase>
     where TBase : BaseEntity
@@ -12,6 +12,12 @@ public abstract class BaseEntityConfiguration<TBase> : IEntityTypeConfiguration<
         builder.HasKey(t => t.Id);
 
         builder.Property(t => t.Id)
-            .ValueGeneratedOnAdd();
+            .ValueGeneratedNever();
+
+        builder.Property(t => t.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }

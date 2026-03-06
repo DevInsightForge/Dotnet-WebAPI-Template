@@ -1,8 +1,8 @@
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Domain.Entities.Common;
+using DevInsightForge.Domain.Entities.Base;
 using DevInsightForge.Persistence.DataAccess.Extensions;
-using DevInsightForge.Persistence.Persistence;
+using DevInsightForge.Persistence.DataContext;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

@@ -1,5 +1,5 @@
 using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Domain.Entities.Common;
+using DevInsightForge.Domain.Entities.Base;
 using System.Linq.Expressions;
 
 namespace DevInsightForge.Application.Abstructions.DataAccess;

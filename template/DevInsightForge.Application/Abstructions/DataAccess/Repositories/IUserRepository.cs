@@ -1,4 +1,4 @@
-using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities;
 
 namespace DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 

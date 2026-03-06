@@ -1,6 +1,6 @@
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
-using DevInsightForge.Domain.Entities.Core;
-using DevInsightForge.Persistence.Persistence;
+using DevInsightForge.Domain.Entities;
+using DevInsightForge.Persistence.DataContext;
 
 namespace DevInsightForge.Persistence.DataAccess.Repositories;
 

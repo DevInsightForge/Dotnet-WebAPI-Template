@@ -1,7 +1,7 @@
 using DevInsightForge.Application.DtoModels.Authentication;
 using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities;
 using DevInsightForge.Application.Results;
 using System.Security.Claims;
 

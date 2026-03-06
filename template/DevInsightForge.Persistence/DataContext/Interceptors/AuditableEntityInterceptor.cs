@@ -1,10 +1,10 @@
 using DevInsightForge.Application.Abstructions.Core;
-using DevInsightForge.Domain.Entities.Common;
+using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace DevInsightForge.Persistence.Persistence.Interceptors;
+namespace DevInsightForge.Persistence.DataContext.Interceptors;
 
 public class AuditableEntityInterceptor(IRequestContextService requestContext) : SaveChangesInterceptor
 {

@@ -1,13 +1,12 @@
-using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevInsightForge.Persistence.Persistence;
+namespace DevInsightForge.Persistence.DataContext;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
     #region Entity DB Set Registrations
     public DbSet<UserModel> Users { get; set; }
-    public DbSet<UserTokenModel> UserTokens { get; set; }
 
     #endregion
 

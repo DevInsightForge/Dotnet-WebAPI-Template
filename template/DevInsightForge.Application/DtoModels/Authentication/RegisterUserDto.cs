@@ -28,9 +28,9 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
             .WithMessage("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
     }
 
-    private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueEmail(string email, CancellationToken ct)
     {
-        return !await _unitOfWork.Users.AnyAsync(u => u.Email == email);
+        return !await _unitOfWork.Users.AnyAsync(u => u.NormalizedEmail == email.Trim().ToUpperInvariant());
     }
 }
 

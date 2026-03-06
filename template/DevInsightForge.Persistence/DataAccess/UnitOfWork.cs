@@ -1,7 +1,7 @@
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Persistence.DataAccess.Repositories;
-using DevInsightForge.Persistence.Persistence;
+using DevInsightForge.Persistence.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,6 @@
-using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities;
 
-namespace DevInsightForge.Domain.Entities.Common;
+namespace DevInsightForge.Domain.Entities.Base;
 
 public abstract class BaseAuditableEntity : BaseEntity
 {

@@ -1,5 +1,5 @@
 using DevInsightForge.Application.DtoModels.User;
-using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities;
 
 namespace DevInsightForge.Application.Configurations.Mapster;
 

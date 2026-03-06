@@ -1,7 +1,7 @@
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Persistence.DataAccess;
-using DevInsightForge.Persistence.Persistence;
-using DevInsightForge.Persistence.Persistence.Interceptors;
+using DevInsightForge.Persistence.DataContext;
+using DevInsightForge.Persistence.DataContext.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
