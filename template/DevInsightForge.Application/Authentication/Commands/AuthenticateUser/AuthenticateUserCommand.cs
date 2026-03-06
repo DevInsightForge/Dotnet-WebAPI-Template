@@ -19,7 +19,6 @@ public sealed record AuthenticateUserCommand : IRequest<AuthenticateUserCommand,
 
 internal sealed class AuthenticateUserCommandHandler(
     IPasswordHashService passwordHashService,
-    IJwtTokenLifetime jwtTokenLifetime,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices) : IRequestHandler<AuthenticateUserCommand, Task<TokenResponseModel>>
@@ -37,18 +36,12 @@ internal sealed class AuthenticateUserCommandHandler(
         await userRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.AccessTokenExpirationInMinutes);
-        var refreshExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.RefreshTokenExpirationInMinutes);
-
-        string accessToken = tokenServices.GenerateJwtToken(user.Id, jwtExpiryDate);
-        string refreshToken = await tokenServices.GenerateRefreshTokenAsync(user.Id, refreshExpiryDate);
+        var (accessToken, accessTokenExpiresAt) = tokenServices.GenerateJwtToken(user.Id);
 
         return new TokenResponseModel()
         {
-            RefreshToken = refreshToken,
-            RefreshTokenExpiresAt = refreshExpiryDate,
             AccessToken = accessToken,
-            AccessTokenExpiresAt = jwtExpiryDate
+            AccessTokenExpiresAt = accessTokenExpiresAt
         };
     }
 }

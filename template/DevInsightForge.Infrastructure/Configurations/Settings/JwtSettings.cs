@@ -8,5 +8,4 @@ public class JwtSettings
     public bool ValidateAudience { get; set; } = false;
     public string ValidAudience { get; set; } = "DefaultAudience";
     public double AccessTokenExpirationInMinutes { get; set; } = 60;
-    public double RefreshTokenExpirationInMinutes { get; set; } = 1440;
 }

@@ -36,12 +36,10 @@ public static class InfrastructureServices
         // Register data-access services
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IUserTokenRepository, UserTokenRepository>();
 
         // Register infrastructure implementations
         services.AddScoped<IPasswordHasher<UserModel>, PasswordHasher<UserModel>>();
         services.AddScoped<IPasswordHashService, PasswordHashService>();
-        services.AddScoped<IJwtTokenLifetime, JwtTokenLifetime>();
         services.AddScoped<ITokenService, TokenServices>();
     }
 }
