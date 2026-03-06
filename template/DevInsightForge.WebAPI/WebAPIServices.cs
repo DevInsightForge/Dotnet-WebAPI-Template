@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Common.Interfaces.Core;
+using DevInsightForge.Application.Abstructions.Core;
 using DevInsightForge.WebAPI.Extensions;
 using DevInsightForge.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -47,4 +47,6 @@ public static class WebAPIServices
         app.MapControllers();
     }
 }
+
+
 

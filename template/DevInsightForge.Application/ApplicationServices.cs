@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Common.Configurations.Mapster;
+using DevInsightForge.Application.Configurations.Mapster;
 using DispatchR.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,3 +18,4 @@ public static class ApplicationServices
         MappingConfigurations.ConfigureMappings();
     }
 }
+

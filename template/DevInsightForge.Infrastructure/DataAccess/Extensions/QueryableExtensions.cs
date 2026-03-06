@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.ViewModels.Common;
+using DevInsightForge.Application.DtoModels.Common;
 using DevInsightForge.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -36,3 +36,5 @@ public static class QueryableExtensions
         };
     }
 }
+
+

@@ -1,6 +1,6 @@
-using DevInsightForge.Application.Common.Interfaces;
-using DevInsightForge.Application.Common.Interfaces.DataAccess;
-using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
+using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.Infrastructure.Configurations.Settings;
 using DevInsightForge.Infrastructure.DataAccess;
@@ -43,3 +43,5 @@ public static class InfrastructureServices
         services.AddScoped<ITokenService, TokenServices>();
     }
 }
+
+

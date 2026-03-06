@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Common.Interfaces;
+using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Infrastructure.Configurations.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -36,3 +36,5 @@ public class TokenServices(IOptions<JwtSettings> jwtSettings) : ITokenService
         return (accessToken, accessTokenExpiresAt);
     }
 }
+
+

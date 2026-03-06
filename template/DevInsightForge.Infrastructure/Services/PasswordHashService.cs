@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Common.Interfaces;
+using DevInsightForge.Application.Abstructions;
 using DevInsightForge.Domain.Entities.Core;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,3 +16,5 @@ public class PasswordHashService(IPasswordHasher<UserModel> passwordHasher) : IP
         return passwordHasher.VerifyHashedPassword(user, hashedPassword, providedPassword) == PasswordVerificationResult.Success;
     }
 }
+
+

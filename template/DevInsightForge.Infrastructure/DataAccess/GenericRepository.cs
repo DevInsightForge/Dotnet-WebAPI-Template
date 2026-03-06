@@ -1,5 +1,5 @@
-﻿using DevInsightForge.Application.Common.Interfaces.DataAccess;
-using DevInsightForge.Application.Common.ViewModels.Common;
+using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.DtoModels.Common;
 using DevInsightForge.Domain.Entities.Common;
 using DevInsightForge.Infrastructure.DataAccess.Extensions;
 using DevInsightForge.Infrastructure.Persistence;
@@ -52,3 +52,6 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         return await _dbSet.Where(where).AsNoTracking().IncludeMultiple(include).GetPaginatedResponseModel(pageNumber, pageSize);
     }
 }
+
+
+

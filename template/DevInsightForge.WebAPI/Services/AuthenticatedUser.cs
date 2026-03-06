@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Common.Interfaces.Core;
+using DevInsightForge.Application.Abstructions.Core;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -21,3 +21,5 @@ public class AuthenticatedUser(IHttpContextAccessor httpContextAccessor) : IAuth
         }
     }
 }
+
+

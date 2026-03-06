@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.Exceptions;
+using DevInsightForge.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -52,3 +52,4 @@ internal sealed class ExceptionHandlerServiceExtension : IExceptionHandler
         return true;
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Common.Interfaces.DataAccess;
+using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
@@ -79,3 +79,5 @@ public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> log
         }
     }
 }
+
+
