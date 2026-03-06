@@ -1,4 +1,4 @@
-﻿namespace DevInsightForge.WebAPI.Extensions;
+namespace DevInsightForge.WebAPI.Extensions;
 
 public static class CorsServiceExtension
 {

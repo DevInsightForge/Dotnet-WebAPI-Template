@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DevInsightForge.WebAPI.Common.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
@@ -54,13 +54,21 @@ public static class AuthenticationServiceExtension
                 context.HandleResponse();
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
 
-                await context.Response.WriteAsJsonAsync(new ProblemDetails
-                {
-                    Title = "Unauthorized",
-                    Detail = "Authentication failed. Please provide a valid access token.",
-                    Status = (int)HttpStatusCode.Unauthorized,
-                    Instance = context.Request.Path.Value
-                });
+                await context.Response.WriteAsJsonAsync(
+                    ApiResponse.FailureResponse(
+                        (int)HttpStatusCode.Unauthorized,
+                        ["Authentication failed. Please provide a valid access token."],
+                        "auth.unauthorized"));
+            },
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+
+                await context.Response.WriteAsJsonAsync(
+                    ApiResponse.FailureResponse(
+                        (int)HttpStatusCode.Forbidden,
+                        ["You do not have permission to access this resource."],
+                        "authorization.forbidden"));
             }
         };
     }

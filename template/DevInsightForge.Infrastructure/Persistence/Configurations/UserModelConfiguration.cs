@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities.Core;
 using DevInsightForge.Infrastructure.Persistence.Configurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

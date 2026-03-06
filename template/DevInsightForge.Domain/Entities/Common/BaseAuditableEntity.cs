@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities.Core;
 
 namespace DevInsightForge.Domain.Entities.Common;
 

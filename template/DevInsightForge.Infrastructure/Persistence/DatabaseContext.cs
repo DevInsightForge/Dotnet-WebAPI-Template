@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Domain.Entities.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevInsightForge.Infrastructure.Persistence;

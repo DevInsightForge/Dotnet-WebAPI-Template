@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Domain.Entities.Common;
+using DevInsightForge.Domain.Entities.Common;
 using System.Security.Cryptography;
 
 namespace DevInsightForge.Domain.Entities.Core;

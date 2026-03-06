@@ -1,4 +1,4 @@
-﻿namespace DevInsightForge.Domain.Entities.Common;
+namespace DevInsightForge.Domain.Entities.Common;
 
 public abstract class BaseEntity
 {

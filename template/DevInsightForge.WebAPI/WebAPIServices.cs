@@ -1,4 +1,5 @@
 using DevInsightForge.Application.Abstructions.Core;
+using DevInsightForge.WebAPI.Common.Filters;
 using DevInsightForge.WebAPI.Extensions;
 using DevInsightForge.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,10 @@ public static class WebAPIServices
     public static void AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Inject Controller Handlers
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<ModelStateValidationFilter>();
+        });
         services.AddHttpContextAccessor();
 
         // Disable inbuild model validators in favor of Fluent Validation
@@ -23,7 +27,6 @@ public static class WebAPIServices
         services.AddCorsService();
 
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
-        services.AddProblemDetails();
 
         // Register WebAPI-specific context services
         services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
