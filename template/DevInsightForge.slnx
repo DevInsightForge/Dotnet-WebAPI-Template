@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DevInsightForge.Application/DevInsightForge.Application.csproj" />
+  <Project Path="DevInsightForge.Domain/DevInsightForge.Domain.csproj" />
+  <Project Path="DevInsightForge.Infrastructure/DevInsightForge.Infrastructure.csproj" />
+  <Project Path="DevInsightForge.WebAPI/DevInsightForge.WebAPI.csproj" />
+</Solution>

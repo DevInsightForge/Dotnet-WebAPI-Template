@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace DevInsightForge.WebAPI.Extensions;
 
@@ -26,20 +26,15 @@ public static class SwaggerServiceExtension
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = JwtBearerDefaults.AuthenticationScheme,
-                Description = "Put **_ONLY_** your JWT Bearer token on the textbox below!",
-
-                Reference = new OpenApiReference
-                {
-                    Id = JwtBearerDefaults.AuthenticationScheme,
-                    Type = ReferenceType.SecurityScheme
-                }
+                Description = "Put **_ONLY_** your JWT Bearer token on the textbox below!"
             };
 
-            setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+            var jwtSchemeId = JwtBearerDefaults.AuthenticationScheme;
+            setup.AddSecurityDefinition(jwtSchemeId, jwtSecurityScheme);
 
-            setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+            setup.AddSecurityRequirement(openApiDocument => new OpenApiSecurityRequirement
             {
-                { jwtSecurityScheme, Array.Empty<string>() }
+                { new OpenApiSecuritySchemeReference(jwtSchemeId, openApiDocument, null), new List<string>() }
             });
         });
 
