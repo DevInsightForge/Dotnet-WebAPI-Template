@@ -1,9 +1,14 @@
-﻿using DevInsightForge.Application.Common.Interfaces.DataAccess;
+using DevInsightForge.Application.Common.Interfaces;
+using DevInsightForge.Application.Common.Interfaces.DataAccess;
 using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
+using DevInsightForge.Domain.Entities.Core;
+using DevInsightForge.Infrastructure.Configurations.Settings;
 using DevInsightForge.Infrastructure.DataAccess;
 using DevInsightForge.Infrastructure.DataAccess.Repositories;
 using DevInsightForge.Infrastructure.Persistence;
 using DevInsightForge.Infrastructure.Persistence.Interceptors;
+using DevInsightForge.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +30,18 @@ public static class InfrastructureServices
         // Configure DbContext interceptor
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
+        // Configure token settings
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+
         // Register data-access services
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTokenRepository, UserTokenRepository>();
+
+        // Register infrastructure implementations
+        services.AddScoped<IPasswordHasher<UserModel>, PasswordHasher<UserModel>>();
+        services.AddScoped<IPasswordHashService, PasswordHashService>();
+        services.AddScoped<IJwtTokenLifetime, JwtTokenLifetime>();
+        services.AddScoped<ITokenService, TokenServices>();
     }
 }

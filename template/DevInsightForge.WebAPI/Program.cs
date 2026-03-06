@@ -10,7 +10,7 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
-builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebAPIServices(builder.Configuration);
 

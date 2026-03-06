@@ -1,8 +1,6 @@
-using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Exceptions;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.ViewModels.Authentication;
-using Microsoft.Extensions.Options;
 
 namespace DevInsightForge.Application.Authentication.Commands.RefreshAccessToken;
 
@@ -12,17 +10,15 @@ public sealed record RefreshAccessTokenCommand : IRequest<RefreshAccessTokenComm
 }
 
 internal sealed class RefreshAccessTokenCommandHandler(
-    IOptions<JwtSettings> jwtSettings,
+    IJwtTokenLifetime jwtTokenLifetime,
     ITokenService tokenServices)
     : IRequestHandler<RefreshAccessTokenCommand, Task<TokenResponseModel>>
 {
-    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
-
     public async Task<TokenResponseModel> Handle(RefreshAccessTokenCommand request, CancellationToken cancellationToken)
     {
         var userToken = await tokenServices.GetValidRefreshToken(request.RefreshToken) ?? throw new BadRequestException("Refresh token provided is invalid or expired");
 
-        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes);
+        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.AccessTokenExpirationInMinutes);
         string accessToken = tokenServices.GenerateJwtToken(userToken.UserId, jwtExpiryDate);
 
         return new TokenResponseModel()

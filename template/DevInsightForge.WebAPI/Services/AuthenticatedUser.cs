@@ -1,5 +1,4 @@
-﻿using DevInsightForge.Application.Common.Interfaces.Core;
-using Microsoft.AspNetCore.Http;
+using DevInsightForge.Application.Common.Interfaces.Core;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -13,7 +12,7 @@ public class AuthenticatedUser(IHttpContextAccessor httpContextAccessor) : IAuth
         {
             string? userIdString = httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sid);
 
-            if (userIdString != null && Guid.TryParse(userIdString, out Guid userIdGuid))
+            if (userIdString is not null && Guid.TryParse(userIdString, out var userIdGuid))
             {
                 return userIdGuid;
             }

@@ -1,12 +1,8 @@
-using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Exceptions;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.Interfaces.DataAccess;
 using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
 using DevInsightForge.Application.Common.ViewModels.Authentication;
-using DevInsightForge.Domain.Entities.Core;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,19 +18,17 @@ public sealed record AuthenticateUserCommand : IRequest<AuthenticateUserCommand,
 }
 
 internal sealed class AuthenticateUserCommandHandler(
-    IPasswordHasher<UserModel> passwordHasher,
-    IOptions<JwtSettings> jwtSettings,
+    IPasswordHashService passwordHashService,
+    IJwtTokenLifetime jwtTokenLifetime,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices) : IRequestHandler<AuthenticateUserCommand, Task<TokenResponseModel>>
 {
-    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
-
     public async Task<TokenResponseModel> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
-        UserModel? user = await userRepository.GetWhereAsync(u => u.NormalizedEmail.Equals(request.Email));
+        var user = await userRepository.GetWhereAsync(u => u.NormalizedEmail.Equals(request.Email));
 
-        if (user is null || passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password) != PasswordVerificationResult.Success)
+        if (user is null || !passwordHashService.VerifyHashedPassword(user, user.PasswordHash, request.Password))
         {
             throw new BadRequestException("Invalid Credentials!");
         }
@@ -43,8 +37,8 @@ internal sealed class AuthenticateUserCommandHandler(
         await userRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes);
-        var refreshExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenExpirationInMinutes);
+        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.AccessTokenExpirationInMinutes);
+        var refreshExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.RefreshTokenExpirationInMinutes);
 
         string accessToken = tokenServices.GenerateJwtToken(user.Id, jwtExpiryDate);
         string refreshToken = await tokenServices.GenerateRefreshTokenAsync(user.Id, refreshExpiryDate);

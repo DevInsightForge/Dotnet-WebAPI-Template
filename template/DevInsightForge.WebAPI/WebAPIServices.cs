@@ -1,4 +1,6 @@
+using DevInsightForge.Application.Common.Interfaces.Core;
 using DevInsightForge.WebAPI.Extensions;
+using DevInsightForge.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -10,6 +12,7 @@ public static class WebAPIServices
     {
         // Inject Controller Handlers
         services.AddControllers();
+        services.AddHttpContextAccessor();
 
         // Disable inbuild model validators in favor of Fluent Validation
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -21,6 +24,9 @@ public static class WebAPIServices
 
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
         services.AddProblemDetails();
+
+        // Register WebAPI-specific context services
+        services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
     }
 
     public static void UseWebAPIServices(this WebApplication app)
@@ -41,5 +47,4 @@ public static class WebAPIServices
         app.MapControllers();
     }
 }
-
 

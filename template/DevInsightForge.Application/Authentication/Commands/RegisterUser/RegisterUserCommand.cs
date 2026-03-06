@@ -1,11 +1,8 @@
-using DevInsightForge.Application.Common.Configurations.Settings;
 using DevInsightForge.Application.Common.Interfaces;
 using DevInsightForge.Application.Common.Interfaces.DataAccess;
 using DevInsightForge.Application.Common.Interfaces.DataAccess.Repositories;
 using DevInsightForge.Application.Common.ViewModels.Authentication;
 using DevInsightForge.Domain.Entities.Core;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,23 +19,21 @@ public sealed record RegisterUserCommand : IRequest<RegisterUserCommand, Task<To
 
 internal sealed class RegisterUserCommandHandler(
     IUserRepository userRepository,
-    IPasswordHasher<UserModel> passwordHasher,
-    IOptions<JwtSettings> jwtSettings,
+    IPasswordHashService passwordHashService,
+    IJwtTokenLifetime jwtTokenLifetime,
     IUnitOfWork unitOfWork,
     ITokenService tokenServices) : IRequestHandler<RegisterUserCommand, Task<TokenResponseModel>>
 {
-    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
-
     public async Task<TokenResponseModel> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         UserModel user = UserModel.CreateUser(request.Email);
-        user.SetPasswordHash(passwordHasher.HashPassword(user, request.Password));
+        user.SetPasswordHash(passwordHashService.HashPassword(user, request.Password));
 
         await userRepository.AddAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes);
-        var refreshExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenExpirationInMinutes);
+        var jwtExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.AccessTokenExpirationInMinutes);
+        var refreshExpiryDate = DateTime.UtcNow.AddMinutes(jwtTokenLifetime.RefreshTokenExpirationInMinutes);
 
         string accessToken = tokenServices.GenerateJwtToken(user.Id, jwtExpiryDate);
         string refreshToken = await tokenServices.GenerateRefreshTokenAsync(user.Id, refreshExpiryDate);

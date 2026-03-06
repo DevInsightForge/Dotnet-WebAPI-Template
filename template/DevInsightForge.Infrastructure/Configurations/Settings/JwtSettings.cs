@@ -1,4 +1,4 @@
-﻿namespace DevInsightForge.Application.Common.Configurations.Settings;
+namespace DevInsightForge.Infrastructure.Configurations.Settings;
 
 public class JwtSettings
 {
