@@ -1,12 +1,12 @@
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
-using DevInsightForge.Infrastructure.DataAccess.Repositories;
-using DevInsightForge.Infrastructure.Persistence;
+using DevInsightForge.Persistence.DataAccess.Repositories;
+using DevInsightForge.Persistence.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
-namespace DevInsightForge.Infrastructure.DataAccess;
+namespace DevInsightForge.Persistence.DataAccess;
 
 public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger) : IUnitOfWork
 {

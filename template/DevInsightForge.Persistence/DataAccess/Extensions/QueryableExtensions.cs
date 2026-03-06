@@ -3,7 +3,7 @@ using DevInsightForge.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace DevInsightForge.Infrastructure.DataAccess.Extensions;
+namespace DevInsightForge.Persistence.DataAccess.Extensions;
 
 public static class QueryableExtensions
 {

@@ -1,8 +1,8 @@
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Domain.Entities.Core;
-using DevInsightForge.Infrastructure.Persistence;
+using DevInsightForge.Persistence.Persistence;
 
-namespace DevInsightForge.Infrastructure.DataAccess.Repositories;
+namespace DevInsightForge.Persistence.DataAccess.Repositories;
 
 public class UserRepository(DatabaseContext dbContext) : GenericRepository<UserModel>(dbContext), IUserRepository
 {

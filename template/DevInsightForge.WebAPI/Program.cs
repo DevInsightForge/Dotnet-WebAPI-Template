@@ -1,5 +1,6 @@
 using DevInsightForge.Application;
 using DevInsightForge.Infrastructure;
+using DevInsightForge.Persistence;
 using DevInsightForge.WebAPI;
 using Serilog;
 
@@ -11,6 +12,7 @@ builder.Host.UseSerilog((context, configuration) =>
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
+builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebAPIServices(builder.Configuration);
 

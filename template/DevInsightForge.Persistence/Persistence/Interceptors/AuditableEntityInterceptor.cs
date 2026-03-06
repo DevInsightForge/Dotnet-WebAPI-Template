@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace DevInsightForge.Infrastructure.Persistence.Interceptors;
+namespace DevInsightForge.Persistence.Persistence.Interceptors;
 
 public class AuditableEntityInterceptor(IRequestContextService requestContext) : SaveChangesInterceptor
 {

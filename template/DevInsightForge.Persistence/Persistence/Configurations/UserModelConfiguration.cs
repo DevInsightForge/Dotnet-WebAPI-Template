@@ -1,9 +1,9 @@
 using DevInsightForge.Domain.Entities.Core;
-using DevInsightForge.Infrastructure.Persistence.Configurations.Common;
+using DevInsightForge.Persistence.Persistence.Configurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DevInsightForge.Infrastructure.Persistence.Configurations;
+namespace DevInsightForge.Persistence.Persistence.Configurations;
 
 internal class UserModelConfiguration : BaseEntityConfiguration<UserModel>
 {

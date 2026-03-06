@@ -1,7 +1,7 @@
 using DevInsightForge.Domain.Entities.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevInsightForge.Infrastructure.Persistence;
+namespace DevInsightForge.Persistence.Persistence;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
