@@ -1,4 +1,5 @@
-﻿using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.DtoModels.Common;
 using DevInsightForge.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -10,13 +11,7 @@ public class EmailService(IOptions<EmailConfigurations> emailOptions) : IEmailSe
 {
     private readonly EmailConfigurations _emailConfigurations = emailOptions.Value;
 
-    public async Task SendAsync(
-        string to,
-        string subject,
-        string body,
-        bool isHtml,
-        IEnumerable<string>? cc = null,
-        CancellationToken ct = default)
+    public async Task SendAsync(EmailMessageDto email, CancellationToken ct = default)
     {
         using var smtpClient = new SmtpClient
         {
@@ -34,16 +29,16 @@ public class EmailService(IOptions<EmailConfigurations> emailOptions) : IEmailSe
                 _emailConfigurations.SmtpPassword);
         }
 
-        using var mailMessage = new MailMessage(_emailConfigurations.EmailFrom, to)
+        using var mailMessage = new MailMessage(_emailConfigurations.EmailFrom, email.To)
         {
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = isHtml
+            Subject = email.Subject,
+            Body = email.Body,
+            IsBodyHtml = email.IsHtml
         };
 
-        if (cc is not null)
+        if (email.Cc is not null)
         {
-            foreach (var ccAddress in cc.Where(address => !string.IsNullOrWhiteSpace(address)))
+            foreach (var ccAddress in email.Cc.Where(address => !string.IsNullOrWhiteSpace(address)))
             {
                 mailMessage.CC.Add(ccAddress);
             }
@@ -52,4 +47,3 @@ public class EmailService(IOptions<EmailConfigurations> emailOptions) : IEmailSe
         await smtpClient.SendMailAsync(mailMessage, ct);
     }
 }
-

@@ -1,14 +1,14 @@
 namespace DevInsightForge.Application.DtoModels.Authentication;
 
-public class AuthenticateUserDto
+public sealed class LoginRequestDto
 {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }
 
-public class AuthenticateUserDtoValidator : AbstractValidator<AuthenticateUserDto>
+public sealed class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto>
 {
-    public AuthenticateUserDtoValidator()
+    public LoginRequestDtoValidator()
     {
         RuleFor(dto => dto.Email)
             .NotEmpty().WithMessage("Email is required.")

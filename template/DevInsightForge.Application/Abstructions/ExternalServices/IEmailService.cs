@@ -1,13 +1,8 @@
-﻿namespace DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.DtoModels.Common;
+
+namespace DevInsightForge.Application.Abstructions;
 
 public interface IEmailService
 {
-    Task SendAsync(
-        string to,
-        string subject,
-        string body,
-        bool isHtml,
-        IEnumerable<string>? cc = null,
-        CancellationToken ct = default);
+    Task SendAsync(EmailMessageDto email, CancellationToken ct = default);
 }
-

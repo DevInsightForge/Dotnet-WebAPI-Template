@@ -1,18 +1,18 @@
-﻿using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.Abstructions.DataAccess;
 
 namespace DevInsightForge.Application.DtoModels.Authentication;
 
-public class RegisterUserDto
+public sealed class RegisterRequestDto
 {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }
 
-public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
+public sealed class RegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public RegisterUserDtoValidator(IUnitOfWork unitOfWork)
+    public RegisterRequestDtoValidator(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
 
@@ -30,8 +30,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 
     private async Task<bool> BeUniqueEmail(string email, CancellationToken ct)
     {
-        return !await _unitOfWork.Users.AnyAsync(u => u.NormalizedEmail == email.Trim().ToUpperInvariant());
+        var normalizedEmail = email.Trim().ToUpperInvariant();
+        return !await _unitOfWork.Users.AnyAsync(u => u.NormalizedEmail == normalizedEmail);
     }
 }
-
-
