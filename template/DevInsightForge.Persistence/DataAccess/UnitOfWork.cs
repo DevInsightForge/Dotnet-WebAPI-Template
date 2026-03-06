@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+﻿using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
 using DevInsightForge.Persistence.DataAccess.Repositories;
 using DevInsightForge.Persistence.DataContext;
@@ -13,34 +13,34 @@ public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> log
     private readonly Lazy<IUserRepository> _users = new(() => new UserRepository(databaseContext));
     public IUserRepository Users => _users.Value;
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        databaseContext.SaveChangesAsync(cancellationToken);
+    public Task<int> SaveChangesAsync(CancellationToken ct = default) =>
+        databaseContext.SaveChangesAsync(ct);
 
-    public async Task WithTransaction(Func<CancellationToken, Task> operation, CancellationToken cancellationToken = default)
+    public async Task WithTransaction(Func<CancellationToken, Task> operation, CancellationToken ct = default)
     {
         if (databaseContext.Database.CurrentTransaction is not null)
         {
-            await operation(cancellationToken);
+            await operation(ct);
             return;
         }
 
         var strategy = databaseContext.Database.CreateExecutionStrategy();
 
-        await strategy.ExecuteAsync(async ct =>
+        await strategy.ExecuteAsync(async internalCt =>
         {
-            await using IDbContextTransaction transaction = await databaseContext.Database.BeginTransactionAsync(ct);
+            await using IDbContextTransaction transaction = await databaseContext.Database.BeginTransactionAsync(internalCt);
             try
             {
-                await operation(ct);
-                await transaction.CommitAsync(ct);
+                await operation(internalCt);
+                await transaction.CommitAsync(internalCt);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error executing transactional operation.");
-                await transaction.RollbackAsync(ct);
+                await transaction.RollbackAsync(internalCt);
                 throw;
             }
-        }, cancellationToken);
+        }, ct);
     }
 
     public void Dispose()
@@ -57,3 +57,4 @@ public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> log
         }
     }
 }
+

@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.Core;
+﻿using DevInsightForge.Application.Abstructions.Core;
 using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.DtoModels.User;
 using DevInsightForge.Domain.Entities;
@@ -12,7 +12,7 @@ internal sealed class GetTokenUserQueryHandler(
     IUnitOfWork unitOfWork,
     IRequestContextService requestContext) : IRequestHandler<GetTokenUserQuery, Task<Result<UserResponseModel>>>
 {
-    public async Task<Result<UserResponseModel>> Handle(GetTokenUserQuery request, CancellationToken cancellationToken)
+    public async Task<Result<UserResponseModel>> Handle(GetTokenUserQuery request, CancellationToken ct)
     {
         if (requestContext.RequestUserId is null)
         {
@@ -26,6 +26,7 @@ internal sealed class GetTokenUserQueryHandler(
             : Result<UserResponseModel>.Success(user.Adapt<UserResponseModel>());
     }
 }
+
 
 
 

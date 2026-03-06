@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.Core;
+﻿using DevInsightForge.Application.Abstructions.Core;
 using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -14,10 +14,10 @@ public class AuditableEntityInterceptor(IRequestContextService requestContext) :
         return base.SavingChanges(eventData, result);
     }
 
-    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken ct = default)
     {
         UpdateEntities(eventData.Context);
-        return await base.SavingChangesAsync(eventData, result, cancellationToken);
+        return await base.SavingChangesAsync(eventData, result, ct);
     }
 
     private void UpdateEntities(DbContext? context)
@@ -48,5 +48,6 @@ public static class Extensions
             r.TargetEntry.Metadata.IsOwned() &&
             (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
 }
+
 
 

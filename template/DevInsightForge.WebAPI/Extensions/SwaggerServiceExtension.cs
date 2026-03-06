@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -38,7 +38,7 @@ public sealed class JwtBearerSecuritySchemeTransformer : IOpenApiDocumentTransfo
 {
     private const string SecuritySchemeId = JwtBearerDefaults.AuthenticationScheme;
 
-    public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+    public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken ct)
     {
         document.Info = new OpenApiInfo
         {
@@ -68,3 +68,4 @@ public sealed class JwtBearerSecuritySchemeTransformer : IOpenApiDocumentTransfo
         return Task.CompletedTask;
     }
 }
+

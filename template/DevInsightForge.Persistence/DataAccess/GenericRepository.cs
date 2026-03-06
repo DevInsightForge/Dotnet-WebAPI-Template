@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+﻿using DevInsightForge.Application.Abstructions.DataAccess;
 using DevInsightForge.Application.DtoModels.Common;
 using DevInsightForge.Domain.Entities.Base;
 using DevInsightForge.Persistence.DataAccess.Extensions;
@@ -12,19 +12,19 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
 {
     protected readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>() ?? throw new ArgumentNullException(nameof(dbContext), "Database context cannot be null.");
 
-    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(TEntity entity, CancellationToken ct = default)
     {
-        await _dbSet.AddAsync(entity, cancellationToken);
+        await _dbSet.AddAsync(entity, ct);
     }
 
-    public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(TEntity entity, CancellationToken ct = default)
     {
         await Task.FromResult(_dbSet.Update(entity));
     }
 
-    public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = default)
     {
-        await _dbSet.AddRangeAsync(entities, cancellationToken);
+        await _dbSet.AddRangeAsync(entities, ct);
     }
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
@@ -52,6 +52,7 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         return await _dbSet.Where(where).AsNoTracking().IncludeMultiple(include).GetPaginatedResponseModel(pageNumber, pageSize);
     }
 }
+
 
 
 

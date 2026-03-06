@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+﻿using DevInsightForge.Application.Abstructions.DataAccess;
 
 namespace DevInsightForge.Application.DtoModels.Authentication;
 
@@ -33,4 +33,5 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
         return !await _unitOfWork.Users.AnyAsync(u => u.NormalizedEmail == email.Trim().ToUpperInvariant());
     }
 }
+
 
