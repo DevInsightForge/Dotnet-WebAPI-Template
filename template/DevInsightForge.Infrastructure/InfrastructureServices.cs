@@ -13,7 +13,7 @@ namespace DevInsightForge.Infrastructure;
 
 public static class InfrastructureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Configure DbContext provider
         services.AddDbContext<DatabaseContext>((sp, options) =>
@@ -29,7 +29,5 @@ public static class InfrastructureServices
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTokenRepository, UserTokenRepository>();
-
-        return services;
     }
 }

@@ -16,16 +16,6 @@ builder.Services.AddWebAPIServices(builder.Configuration);
 
 // Initialize app from builder
 var app = builder.Build();
+app.UseWebAPIServices();
 
-// Configure App Pipelines
-app.UseExceptionHandler();
-app.UseSerilogRequestLogging();
-app.UseSwagger();
-app.UseSwaggerUI(c => c.EnablePersistAuthorization());
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.UseCors();
-
-// Run application
-app.Run();
+await app.RunAsync();

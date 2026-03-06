@@ -1,11 +1,12 @@
-﻿using DevInsightForge.WebAPI.Extensions;
+using DevInsightForge.WebAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace DevInsightForge.WebAPI;
 
 public static class WebAPIServices
 {
-    public static IServiceCollection AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Inject Controller Handlers
         services.AddControllers();
@@ -20,7 +21,25 @@ public static class WebAPIServices
 
         services.AddExceptionHandler<ExceptionHandlerServiceExtension>();
         services.AddProblemDetails();
+    }
 
-        return services;
+    public static void UseWebAPIServices(this WebApplication app)
+    {
+        // Configure App Pipelines
+        app.UseExceptionHandler();
+        app.UseSerilogRequestLogging();
+
+        if (app.Environment.IsDevelopment())
+            app.UseSwaggerService();
+
+        app.UseHttpsRedirection();
+        app.UseCors();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
     }
 }
+
+

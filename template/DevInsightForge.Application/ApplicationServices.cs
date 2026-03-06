@@ -16,7 +16,7 @@ namespace DevInsightForge.Application;
 
 public static class ApplicationServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Inject and Configure Mediatr
         services.AddMediatR(cfg =>
@@ -47,7 +47,5 @@ public static class ApplicationServices
 
         // Register application services
         services.AddScoped<ITokenService, TokenServices>();
-
-        return services;
     }
 }
