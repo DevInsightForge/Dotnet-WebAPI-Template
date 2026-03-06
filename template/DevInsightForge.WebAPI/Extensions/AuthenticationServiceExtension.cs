@@ -54,21 +54,21 @@ public static class AuthenticationServiceExtension
                 context.HandleResponse();
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
 
-                await context.Response.WriteAsJsonAsync(
-                    ApiResponse.FailureResponse(
-                        (int)HttpStatusCode.Unauthorized,
-                        ["Authentication failed. Please provide a valid access token."],
-                        "auth.unauthorized"));
+                await context.Response.WriteAsJsonAsync(new ApiResponse
+                {
+                    StatusCode = (int)HttpStatusCode.Unauthorized,
+                    Message = ["Authentication failed. Please provide a valid access token."]
+                });
             },
             OnForbidden = async context =>
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
-                await context.Response.WriteAsJsonAsync(
-                    ApiResponse.FailureResponse(
-                        (int)HttpStatusCode.Forbidden,
-                        ["You do not have permission to access this resource."],
-                        "authorization.forbidden"));
+                await context.Response.WriteAsJsonAsync(new ApiResponse
+                {
+                    StatusCode = (int)HttpStatusCode.Forbidden,
+                    Message = ["You do not have permission to access this resource."]
+                });
             }
         };
     }

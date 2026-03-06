@@ -20,12 +20,12 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
         Expression<Func<TEntity, bool>> where,
         params Expression<Func<TEntity, object>>[] include);
 
-    Task<PaginatedResponseModel<TEntity>> GetAllAsync(
+    Task<PaginatedDto<TEntity>> GetAllAsync(
         int pageNumber,
         int pageSize,
         params Expression<Func<TEntity, object>>[] include);
 
-    Task<PaginatedResponseModel<TEntity>> GetAllWhereAsync(
+    Task<PaginatedDto<TEntity>> GetAllWhereAsync(
         int pageNumber,
         int pageSize,
         Expression<Func<TEntity, bool>> where,

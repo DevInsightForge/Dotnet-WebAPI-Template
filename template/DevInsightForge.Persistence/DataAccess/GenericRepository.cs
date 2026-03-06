@@ -42,14 +42,14 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         return await _dbSet.AsNoTracking().AsQueryable().IncludeMultiple(include).FirstOrDefaultAsync(where);
     }
 
-    public async Task<PaginatedResponseModel<TEntity>> GetAllAsync(int pageNumber, int pageSize, params Expression<Func<TEntity, object>>[] include)
+    public async Task<PaginatedDto<TEntity>> GetAllAsync(int pageNumber, int pageSize, params Expression<Func<TEntity, object>>[] include)
     {
-        return await _dbSet.AsNoTracking().IncludeMultiple(include).GetPaginatedResponseModel(pageNumber, pageSize);
+        return await _dbSet.AsNoTracking().IncludeMultiple(include).GetPaginatedResultAsync(pageNumber, pageSize);
     }
 
-    public async Task<PaginatedResponseModel<TEntity>> GetAllWhereAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> where, params Expression<Func<TEntity, object>>[] include)
+    public async Task<PaginatedDto<TEntity>> GetAllWhereAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> where, params Expression<Func<TEntity, object>>[] include)
     {
-        return await _dbSet.Where(where).AsNoTracking().IncludeMultiple(include).GetPaginatedResponseModel(pageNumber, pageSize);
+        return await _dbSet.Where(where).AsNoTracking().IncludeMultiple(include).GetPaginatedResultAsync(pageNumber, pageSize);
     }
 }
 

@@ -1,7 +1,7 @@
-﻿using DevInsightForge.Application.Features.Authentication.Commands;
-using DevInsightForge.Application.Features.Authentication.Queries;
-using DevInsightForge.Application.DtoModels.Authentication;
+﻿using DevInsightForge.Application.DtoModels.Authentication;
 using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Features.Authentication.Commands;
+using DevInsightForge.Application.Features.Authentication.Queries;
 using DevInsightForge.WebAPI.Common.Mappings;
 using DevInsightForge.WebAPI.Common.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -39,4 +39,3 @@ public class AuthenticationController(IMediator mediator) : ControllerBase
         return result.ToApiResponse();
     }
 }
-

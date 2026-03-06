@@ -2,7 +2,7 @@ using DevInsightForge.Domain.Entities.Base;
 
 namespace DevInsightForge.Application.DtoModels.Common;
 
-public class PaginatedResponseModel<TEntity> where TEntity : BaseEntity
+public class PaginatedDto<TEntity> where TEntity : BaseEntity
 {
     public int TotalRecords { get; set; }
     public int CurrentPageNumber { get; set; }
@@ -10,7 +10,7 @@ public class PaginatedResponseModel<TEntity> where TEntity : BaseEntity
     public int TotalPages => (int)Math.Ceiling((double)TotalRecords / PageSize);
     public bool HasNextPage => CurrentPageNumber < TotalPages;
     public bool HasPreviousPage => CurrentPageNumber > 1;
-    public IEnumerable<TEntity> Data { get; set; } = Enumerable.Empty<TEntity>();
+    public IEnumerable<TEntity> Data { get; set; } = [];
 }
 
 

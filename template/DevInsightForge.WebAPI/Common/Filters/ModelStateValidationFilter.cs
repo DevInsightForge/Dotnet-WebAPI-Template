@@ -28,10 +28,11 @@ public sealed class ModelStateValidationFilter : IActionFilter
 
         messages.Insert(0, "One or more validation errors occurred.");
 
-        var response = ApiResponse.FailureResponse(
-            StatusCodes.Status422UnprocessableEntity,
-            messages,
-            "validation_error");
+        var response = new ApiResponse
+        {
+            StatusCode = StatusCodes.Status422UnprocessableEntity,
+            Message = messages
+        };
 
         context.Result = new ObjectResult(response)
         {

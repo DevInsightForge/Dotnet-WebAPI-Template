@@ -18,7 +18,7 @@ public static class QueryableExtensions
         return query;
     }
 
-    public static async Task<PaginatedResponseModel<TEntity>> GetPaginatedResponseModel<TEntity>(
+    public static async Task<PaginatedDto<TEntity>> GetPaginatedResultAsync<TEntity>(
         this IQueryable<TEntity> query, int pageNumber, int pageSize) where TEntity : BaseEntity
     {
         var totalRecords = await query.CountAsync();
@@ -27,7 +27,7 @@ public static class QueryableExtensions
             .Take(pageSize)
             .ToListAsync();
 
-        return new PaginatedResponseModel<TEntity>
+        return new PaginatedDto<TEntity>
         {
             TotalRecords = totalRecords,
             CurrentPageNumber = pageNumber,

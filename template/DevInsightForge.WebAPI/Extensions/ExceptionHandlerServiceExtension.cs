@@ -10,10 +10,11 @@ internal sealed class ExceptionHandlerServiceExtension(ILogger<ExceptionHandlerS
         logger.LogError(rawException, "Unhandled exception while processing {Path}", httpContext.Request.Path);
 
         const int statusCode = StatusCodes.Status500InternalServerError;
-        var apiResponse = ApiResponse.FailureResponse(
-            statusCode,
-            ["An unexpected error occurred."],
-            "server_error");
+        var apiResponse = new ApiResponse
+        {
+            StatusCode = statusCode,
+            Message = ["An unexpected error occurred."]
+        };
 
         httpContext.Response.StatusCode = statusCode;
         await httpContext.Response.WriteAsJsonAsync(apiResponse, ct);
