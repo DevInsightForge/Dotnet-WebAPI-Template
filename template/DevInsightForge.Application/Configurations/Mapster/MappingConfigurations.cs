@@ -9,7 +9,7 @@ public static class MappingConfigurations
     {
         TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 
-        TypeAdapterConfig<UserModel, UserResponseModel>
+        TypeAdapterConfig<User, UserResponseModel>
             .NewConfig()
             .Map(dest => dest.UserId, src => src.Id.ToString());
     }

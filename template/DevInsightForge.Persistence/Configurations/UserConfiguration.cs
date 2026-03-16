@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DevInsightForge.Persistence.Configurations;
 
-internal class UserModelConfiguration : BaseEntityConfiguration<UserModel>
+internal class UserConfiguration : BaseEntityConfiguration<User>
 {
-    public override void Configure(EntityTypeBuilder<UserModel> builder)
+    public override void Configure(EntityTypeBuilder<User> builder)
     {
         base.Configure(builder);
 

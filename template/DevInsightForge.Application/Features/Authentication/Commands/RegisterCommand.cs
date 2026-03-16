@@ -24,7 +24,7 @@ internal sealed class RegisterCommandHandler(
             return Result.ValidationFailure(validationResult);
         }
 
-        var user = UserModel.CreateUser(request.Dto.Email.Trim())
+        var user = User.Create(request.Dto.Email.Trim())
             .SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
 
         await unitOfWork.WithTransaction(async innerCt =>

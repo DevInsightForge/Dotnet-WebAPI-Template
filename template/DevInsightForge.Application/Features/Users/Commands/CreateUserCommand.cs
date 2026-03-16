@@ -21,7 +21,7 @@ internal sealed class CreateUserCommandHandler(
             return Result<UserResponseModel>.ValidationFailure(validationResult);
         }
 
-        var user = UserModel.CreateUser(request.Dto.Email.Trim())
+        var user = User.Create(request.Dto.Email.Trim())
             .SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
 
         if (request.Dto.IsEmailVerified)

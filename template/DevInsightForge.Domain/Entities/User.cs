@@ -2,30 +2,27 @@ using DevInsightForge.Domain.Entities.Base;
 
 namespace DevInsightForge.Domain.Entities;
 
-public class UserModel : BaseEntity
+public class User : BaseEntity
 {
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public bool IsEmailVerified { get; private set; } = false;
+    public bool IsEmailVerified { get; private set; }
     public DateTime DateJoined { get; private set; }
     public DateTime LastLogin { get; private set; }
 
-
-    // Private constructor
-    private UserModel()
+    private User()
     {
         DateJoined = DateTime.UtcNow;
         LastLogin = DateJoined;
     }
 
-    // Factory method
-    public static UserModel CreateUser(string email)
+    public static User Create(string email)
     {
-        UserModel user = new();
+        var user = new User();
         return user.SetEmail(email);
     }
 
-    public UserModel SetEmail(string email)
+    public User SetEmail(string email)
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         ArgumentException.ThrowIfNullOrEmpty(normalizedEmail, nameof(email));
@@ -35,21 +32,21 @@ public class UserModel : BaseEntity
         return this;
     }
 
-    public UserModel SetPasswordHash(string password)
+    public User SetPasswordHash(string passwordHash)
     {
-        ArgumentException.ThrowIfNullOrEmpty(password.Trim(), nameof(password));
+        ArgumentException.ThrowIfNullOrEmpty(passwordHash.Trim(), nameof(passwordHash));
 
-        PasswordHash = password;
+        PasswordHash = passwordHash;
         return this;
     }
 
-    public UserModel MarkEmailAsVerified()
+    public User MarkEmailAsVerified()
     {
         IsEmailVerified = true;
         return this;
     }
 
-    public UserModel UpdateLastLogin()
+    public User UpdateLastLogin()
     {
         LastLogin = DateTime.UtcNow;
         return this;
