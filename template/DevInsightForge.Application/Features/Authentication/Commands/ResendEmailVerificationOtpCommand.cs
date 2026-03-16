@@ -9,7 +9,7 @@ namespace DevInsightForge.Application.Features.Authentication.Commands;
 public sealed record ResendEmailVerificationOtpCommand(ResendEmailVerificationOtpRequestDto Dto) : IRequest<ResendEmailVerificationOtpCommand, Task<Result>>;
 
 internal sealed class ResendEmailVerificationOtpCommandHandler(
-    IEncryptionService encryptionService,
+    IOtpService otpService,
     IEmailService emailService,
     IUnitOfWork unitOfWork,
     IValidator<ResendEmailVerificationOtpRequestDto> validator) : IRequestHandler<ResendEmailVerificationOtpCommand, Task<Result>>
@@ -22,8 +22,8 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
             return Result.ValidationFailure(validationResult);
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToUpperInvariant();
-        var user = await unitOfWork.Users.GetWhereAsync(u => u.NormalizedEmail == normalizedEmail);
+        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
         if (user is null)
         {
             return Result.Failure(new Error("user.not_found", "User not found.", ErrorType.NotFound));
@@ -34,7 +34,7 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
             return Result.Failure(new Error("auth.already_verified", "Email is already verified.", ErrorType.Conflict));
         }
 
-        var (otpCode, expiresAtUtc) = encryptionService.GenerateEmailVerificationOtp(user.Email);
+        var (otpCode, expiresAtUtc) = otpService.GenerateEmailVerificationOtp(user.Email);
         await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, ct);
         return Result.Success();
     }

@@ -8,7 +8,7 @@ namespace DevInsightForge.Application.Features.Authentication.Commands;
 public sealed record VerifyEmailOtpCommand(VerifyEmailOtpRequestDto Dto) : IRequest<VerifyEmailOtpCommand, Task<Result>>;
 
 internal sealed class VerifyEmailOtpCommandHandler(
-    IEncryptionService encryptionService,
+    IOtpService otpService,
     IUnitOfWork unitOfWork,
     IValidator<VerifyEmailOtpRequestDto> validator) : IRequestHandler<VerifyEmailOtpCommand, Task<Result>>
 {
@@ -20,8 +20,8 @@ internal sealed class VerifyEmailOtpCommandHandler(
             return Result.ValidationFailure(validationResult);
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToUpperInvariant();
-        var user = await unitOfWork.Users.GetWhereAsync(u => u.NormalizedEmail == normalizedEmail);
+        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
         if (user is null)
         {
             return Result.Failure(new Error("user.not_found", "User not found.", ErrorType.NotFound));
@@ -32,7 +32,7 @@ internal sealed class VerifyEmailOtpCommandHandler(
             return Result.Failure(new Error("auth.already_verified", "Email is already verified.", ErrorType.Conflict));
         }
 
-        var isValid = encryptionService.VerifyEmailVerificationOtp(request.Dto.Email, request.Dto.Otp);
+        var isValid = otpService.VerifyEmailVerificationOtp(request.Dto.Email, request.Dto.Otp);
         if (!isValid)
         {
             return Result.Failure(new Error(

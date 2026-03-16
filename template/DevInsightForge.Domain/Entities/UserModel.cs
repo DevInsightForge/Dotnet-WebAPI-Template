@@ -5,7 +5,6 @@ namespace DevInsightForge.Domain.Entities;
 public class UserModel : BaseEntity
 {
     public string Email { get; private set; } = string.Empty;
-    public string NormalizedEmail { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
     public bool IsEmailVerified { get; private set; } = false;
     public DateTime DateJoined { get; private set; }
@@ -28,10 +27,10 @@ public class UserModel : BaseEntity
 
     public UserModel SetEmail(string email)
     {
-        ArgumentException.ThrowIfNullOrEmpty(email.Trim(), nameof(email));
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        ArgumentException.ThrowIfNullOrEmpty(normalizedEmail, nameof(email));
 
-        Email = email;
-        NormalizedEmail = email.ToUpperInvariant();
+        Email = normalizedEmail;
 
         return this;
     }

@@ -1,18 +1,19 @@
 using DevInsightForge.Application.Abstructions.DataAccess;
 
-namespace DevInsightForge.Application.DtoModels.Authentication;
+namespace DevInsightForge.Application.DtoModels.User;
 
-public sealed class RegisterRequestDto
+public sealed class CreateUserRequestDto
 {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public bool IsEmailVerified { get; set; } = false;
 }
 
-public sealed class RegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
+public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUserRequestDto>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public RegisterRequestDtoValidator(IUnitOfWork unitOfWork)
+    public CreateUserRequestDtoValidator(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
 

@@ -52,6 +52,7 @@ Do not introduce reverse or circular dependencies.
 - Entities use encapsulation (`private set`, methods/factory methods for mutation).
 - IDs use GUID v7 by default (`Guid.CreateVersion7()`).
 - Soft-delete is enabled through `IsDeleted` and global query filters.
+- For soft-deletable entities, do not enforce uniqueness at database level (no unique constraints/indexes); enforce uniqueness in Application feature logic instead.
 - Auditing is handled by `BaseAuditableEntity` + save interceptor.
 - Use `BaseEntity` for identity/account tables unless full audit lineage is strictly required.
 - For entities inheriting `BaseAuditableEntity`, keep audit FKs required and ensure create flows provide an actor context.

@@ -11,6 +11,7 @@ public sealed record RegisterCommand(RegisterRequestDto Dto) : IRequest<Register
 
 internal sealed class RegisterCommandHandler(
     IEncryptionService encryptionService,
+    IOtpService otpService,
     IEmailService emailService,
     IUnitOfWork unitOfWork,
     IValidator<RegisterRequestDto> registerValidator) : IRequestHandler<RegisterCommand, Task<Result>>
@@ -32,7 +33,7 @@ internal sealed class RegisterCommandHandler(
             await unitOfWork.SaveChangesAsync(innerCt);
         }, ct);
 
-        var (otpCode, expiresAtUtc) = encryptionService.GenerateEmailVerificationOtp(user.Email);
+        var (otpCode, expiresAtUtc) = otpService.GenerateEmailVerificationOtp(user.Email);
         await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, ct);
 
         return Result.Created();

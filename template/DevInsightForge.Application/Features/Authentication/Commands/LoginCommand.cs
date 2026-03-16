@@ -25,8 +25,8 @@ internal sealed class LoginCommandHandler(
             return Result<AuthSessionResponseDto>.ValidationFailure(validationResult);
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToUpperInvariant();
-        var user = await unitOfWork.Users.GetWhereAsync(u => u.NormalizedEmail == normalizedEmail);
+        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
 
         if (user is null || !encryptionService.VerifyPassword(user.PasswordHash, request.Dto.Password))
         {

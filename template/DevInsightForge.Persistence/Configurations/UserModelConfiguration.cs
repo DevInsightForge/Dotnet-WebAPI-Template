@@ -17,12 +17,7 @@ internal class UserModelConfiguration : BaseEntityConfiguration<UserModel>
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.Property(u => u.NormalizedEmail)
-            .IsRequired()
-            .HasMaxLength(255);
-
-        builder.HasIndex(u => u.NormalizedEmail)
-            .IsUnique();
+        builder.HasIndex(u => u.Email);
 
         builder.Property(u => u.PasswordHash)
             .IsRequired()
@@ -39,10 +34,9 @@ internal class UserModelConfiguration : BaseEntityConfiguration<UserModel>
 
         builder.HasData(new
         {
-            Id = Guid.Parse("019cc42b-1d4a-7e16-886c-5267c7e96651"),
-            Email = "admin@default.local",
-            NormalizedEmail = "ADMIN@DEFAULT.LOCAL",
-            PasswordHash = "$argon2id$v=19$m=65536,t=3,p=1$Xka0Ez/kddlgKLbErxj7Ng$mBT9xHzRHIhVfsL3kV79DzB2TIL/mMhXp5SbVHBMzTc",
+            Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            Email = "admin@system.local",
+            PasswordHash = "$2a$12$ByCcav7akmgD92OJcyegQe38aeIWvJj0wroOQjCKo0MG7nL3Yh7Qa",
             IsEmailVerified = true,
             DateJoined = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             LastLogin = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
