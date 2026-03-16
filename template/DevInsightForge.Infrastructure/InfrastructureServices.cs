@@ -11,20 +11,23 @@ public static class InfrastructureServices
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Configure and validate JWT settings at startup
         services.AddOptions<JwtConfigurations>()
             .Bind(configuration.GetSection("JwtConfigurations"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        // Configure and validate email settings at startup
+        services.AddOptions<ApplicationConfigurations>()
+            .Bind(configuration.GetSection("ApplicationConfigurations"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         services.AddOptions<EmailConfigurations>()
             .Bind(configuration.GetSection("EmailSetting"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        // Register infrastructure implementations
         services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<ITokenService, TokenServices>();
         services.AddScoped<IEmailService, EmailService>();
     }
