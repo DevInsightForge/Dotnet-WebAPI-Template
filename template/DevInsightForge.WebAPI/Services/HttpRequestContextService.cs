@@ -3,16 +3,16 @@ using System.Security.Claims;
 
 namespace DevInsightForge.WebAPI.Services;
 
-public class RequestContextService(IHttpContextAccessor httpContextAccessor) : IRequestContextService
+public class HttpRequestContextService(IHttpContextAccessor httpContextAccessor) : IRequestContextService
 {
     private readonly Lazy<Guid?> _userId = new(() =>
     {
         var principal = httpContextAccessor.HttpContext?.User;
-        string? userIdString = principal?.FindFirstValue(ClaimTypes.Sid);
+        var userIdValue = principal?.FindFirstValue(ClaimTypes.Sid);
 
-        if (userIdString is not null && Guid.TryParse(userIdString, out var userIdGuid))
+        if (userIdValue is not null && Guid.TryParse(userIdValue, out var userId))
         {
-            return userIdGuid;
+            return userId;
         }
 
         return null;
@@ -20,5 +20,3 @@ public class RequestContextService(IHttpContextAccessor httpContextAccessor) : I
 
     public Guid? RequestUserId => _userId.Value;
 }
-
-

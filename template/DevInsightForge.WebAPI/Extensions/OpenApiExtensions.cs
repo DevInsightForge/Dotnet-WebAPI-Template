@@ -1,23 +1,25 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DevInsightForge.WebAPI.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace DevInsightForge.WebAPI.Extensions;
 
-public static class SwaggerServiceExtension
+public static class OpenApiExtensions
 {
-    public static IServiceCollection AddSwaggerService(this IServiceCollection services)
+    public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection services)
     {
         services.AddOpenApi("v1", options =>
         {
-            options.AddDocumentTransformer<JwtBearerSecuritySchemeTransformer>();
+            options.AddDocumentTransformer<JwtBearerSecurityDocumentTransformer>();
+            options.AddOperationTransformer<ProblemDetailsOperationTransformer>();
         });
 
         return services;
     }
 
-    public static void UseSwaggerService(this WebApplication app)
+    public static void UseOpenApiDocumentation(this WebApplication app)
     {
         app.MapOpenApi();
 
@@ -34,11 +36,11 @@ public static class SwaggerServiceExtension
     }
 }
 
-public sealed class JwtBearerSecuritySchemeTransformer : IOpenApiDocumentTransformer
+public sealed class JwtBearerSecurityDocumentTransformer : IOpenApiDocumentTransformer
 {
     private const string SecuritySchemeId = JwtBearerDefaults.AuthenticationScheme;
 
-    public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken ct)
+    public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
     {
         document.Info = new OpenApiInfo
         {
@@ -69,3 +71,26 @@ public sealed class JwtBearerSecuritySchemeTransformer : IOpenApiDocumentTransfo
     }
 }
 
+public sealed class ProblemDetailsOperationTransformer : IOpenApiOperationTransformer
+{
+    public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
+    {
+        operation.Responses ??= [];
+
+        var errorResponseSchema = await context.GetOrCreateSchemaAsync(typeof(ErrorResponse), null, cancellationToken);
+
+        operation.Responses["4xx/5xx"] = new OpenApiResponse
+        {
+            Description = typeof(ErrorResponse).Name,
+            Content = new Dictionary<string, OpenApiMediaType>
+            {
+                ["application/problem+json"] = new OpenApiMediaType
+                {
+                    Schema = errorResponseSchema
+                }
+            }
+        };
+
+        return;
+    }
+}

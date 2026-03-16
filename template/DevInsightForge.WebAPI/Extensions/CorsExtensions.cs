@@ -1,10 +1,9 @@
 namespace DevInsightForge.WebAPI.Extensions;
 
-public static class CorsServiceExtension
+public static class CorsExtensions
 {
-    public static IServiceCollection AddCorsService(this IServiceCollection services)
+    public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
     {
-        // Enforce CORS policy
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder => builder

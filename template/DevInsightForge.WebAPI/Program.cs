@@ -14,10 +14,10 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebAPIServices(builder.Configuration);
+builder.Services.AddWebApiServices(builder.Configuration);
 
 // Initialize app from builder
 var app = builder.Build();
-app.UseWebAPIServices();
+app.UseWebApiServices();
 
 await app.RunAsync();
