@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DevInsightForge.Infrastructure.Configurations;
 
-public class ApplicationConfigurations
+public class ApplicationConfiguration
 {
     [Required]
     [MinLength(32)]

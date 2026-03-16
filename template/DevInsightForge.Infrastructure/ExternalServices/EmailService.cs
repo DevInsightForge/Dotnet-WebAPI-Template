@@ -7,9 +7,9 @@ using System.Net.Mail;
 
 namespace DevInsightForge.Infrastructure.ExternalServices;
 
-public class EmailService(IOptions<EmailConfigurations> emailOptions) : IEmailService
+public class EmailService(IOptions<EmailConfiguration> emailOptions) : IEmailService
 {
-    private readonly EmailConfigurations _emailConfigurations = emailOptions.Value;
+    private readonly EmailConfiguration _emailConfigurations = emailOptions.Value;
 
     public async Task SendAsync(EmailMessageDto email, CancellationToken ct = default)
     {
@@ -17,7 +17,7 @@ public class EmailService(IOptions<EmailConfigurations> emailOptions) : IEmailSe
         {
             Host = _emailConfigurations.SmtpHost,
             Port = _emailConfigurations.SmtpPort,
-            EnableSsl = _emailConfigurations.SmtpSSL,
+            EnableSsl = _emailConfigurations.SmtpSsl,
             DeliveryMethod = SmtpDeliveryMethod.Network,
             UseDefaultCredentials = false
         };

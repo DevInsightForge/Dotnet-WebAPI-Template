@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DevInsightForge.Infrastructure.Configurations;
 
-public class EmailConfigurations
+public class EmailConfiguration
 {
     [Required]
     [EmailAddress]
@@ -14,7 +14,7 @@ public class EmailConfigurations
     [Range(1, 65535)]
     public int SmtpPort { get; set; } = 25;
 
-    public bool SmtpSSL { get; set; }
+    public bool SmtpSsl { get; set; }
 
     public string SmtpUser { get; set; } = string.Empty;
 

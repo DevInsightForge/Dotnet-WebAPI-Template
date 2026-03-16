@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DevInsightForge.Infrastructure.Configurations;
 
-public class JwtConfigurations
+public class JwtConfiguration
 {
     [Required]
     [MinLength(32)]

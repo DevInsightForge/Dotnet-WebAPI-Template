@@ -7,28 +7,28 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DevInsightForge.Infrastructure;
 
-public static class InfrastructureServices
+public static class InfrastructureExtensions
 {
-    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<JwtConfigurations>()
-            .Bind(configuration.GetSection("JwtConfigurations"))
+        services.AddOptions<JwtConfiguration>()
+            .Bind(configuration.GetSection("JwtConfiguration"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<ApplicationConfigurations>()
-            .Bind(configuration.GetSection("ApplicationConfigurations"))
+        services.AddOptions<ApplicationConfiguration>()
+            .Bind(configuration.GetSection("ApplicationConfiguration"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<EmailConfigurations>()
-            .Bind(configuration.GetSection("EmailSetting"))
+        services.AddOptions<EmailConfiguration>()
+            .Bind(configuration.GetSection("EmailConfiguration"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
         services.AddScoped<IEncryptionService, EncryptionService>();
         services.AddScoped<IOtpService, OtpService>();
-        services.AddScoped<ITokenService, TokenServices>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
     }
 }

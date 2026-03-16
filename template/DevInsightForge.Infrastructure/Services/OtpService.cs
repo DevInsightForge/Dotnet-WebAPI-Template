@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DevInsightForge.Infrastructure.Services;
 
-public class OtpService(IOptions<ApplicationConfigurations> applicationOptions) : IOtpService
+public class OtpService(IOptions<ApplicationConfiguration> applicationOptions) : IOtpService
 {
     private static readonly TimeSpan OtpLifetime = TimeSpan.FromMinutes(10);
     private static readonly TimeSpan OtpTimeStep = TimeSpan.FromMinutes(5);

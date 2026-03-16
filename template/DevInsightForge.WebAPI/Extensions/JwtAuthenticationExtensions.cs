@@ -11,8 +11,8 @@ public static class JwtAuthenticationExtensions
 {
     public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtConfiguration = configuration.GetSection("JwtConfigurations").Get<JwtConfigurations>() ??
-            throw new InvalidOperationException("JwtConfigurations not defined");
+        var jwtConfiguration = configuration.GetSection("JwtConfiguration").Get<JwtConfiguration>() ??
+            throw new InvalidOperationException("JwtConfiguration not defined");
 
         services.AddAuthentication(options =>
         {

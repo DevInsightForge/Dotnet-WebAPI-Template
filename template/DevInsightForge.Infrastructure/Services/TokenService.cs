@@ -8,9 +8,9 @@ using System.Text;
 
 namespace DevInsightForge.Infrastructure.Services;
 
-public class TokenServices(IOptions<JwtConfigurations> jwtSettings) : ITokenService
+public class TokenService(IOptions<JwtConfiguration> jwtSettings) : ITokenService
 {
-    private readonly JwtConfigurations _jwtSettings = jwtSettings.Value;
+    private readonly JwtConfiguration _jwtSettings = jwtSettings.Value;
 
     public (string token, DateTime expiry) GenerateJwtToken(List<Claim> claims)
     {
