@@ -1,5 +1,5 @@
-using DevInsightForge.Application.Abstractions;
 using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Results;
 using DevInsightForge.Domain.Entities;

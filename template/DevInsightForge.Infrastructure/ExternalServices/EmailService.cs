@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Mail;
-using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.ExternalServices;
 using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;

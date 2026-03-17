@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace DevInsightForge.Application.Abstractions;
+namespace DevInsightForge.Application.Abstractions.InternalServices;
 
 public interface ITokenService
 {

@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

@@ -1,4 +1,5 @@
-using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.ExternalServices;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Infrastructure.Configurations;
 using DevInsightForge.Infrastructure.ExternalServices;
 using DevInsightForge.Infrastructure.Services;

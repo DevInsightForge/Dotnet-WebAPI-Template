@@ -1,6 +1,6 @@
 using DevInsightForge.Application.Contracts.Common;
 
-namespace DevInsightForge.Application.Abstractions;
+namespace DevInsightForge.Application.Abstractions.ExternalServices;
 
 public interface IEmailService
 {

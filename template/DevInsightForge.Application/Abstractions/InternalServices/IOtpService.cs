@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.Abstractions;
+namespace DevInsightForge.Application.Abstractions.InternalServices;
 
 public interface IOtpService
 {

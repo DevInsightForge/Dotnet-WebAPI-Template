@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.InternalServices;
 
 namespace DevInsightForge.Infrastructure.Services;
 

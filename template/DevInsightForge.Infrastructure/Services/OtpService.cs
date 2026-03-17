@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
-using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 

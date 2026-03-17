@@ -1,6 +1,7 @@
 using System.Security.Claims;
-using DevInsightForge.Application.Abstractions;
 using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Abstractions.ExternalServices;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Application.Contracts.Authentication;
 using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Application.Contracts.User;
