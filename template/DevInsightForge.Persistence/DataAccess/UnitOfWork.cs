@@ -1,5 +1,5 @@
-﻿using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.Abstructions.DataAccess.Repositories;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Abstractions.DataAccess.Repositories;
 using DevInsightForge.Persistence.DataAccess.Repositories;
 using DevInsightForge.Persistence.DataContext;
 using Microsoft.EntityFrameworkCore;
@@ -57,4 +57,5 @@ public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> log
         }
     }
 }
+
 

@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.Abstractions;
 
 namespace DevInsightForge.Infrastructure.Services;
 
@@ -16,3 +16,4 @@ public class EncryptionService : IEncryptionService
         return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
     }
 }
+

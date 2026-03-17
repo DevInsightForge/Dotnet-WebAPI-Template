@@ -1,14 +1,14 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.Authentication;
-using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Application.DtoModels.User;
-using DevInsightForge.Application.Results;
 using System.Security.Claims;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.Authentication;
+using DevInsightForge.Application.Contracts.Common;
+using DevInsightForge.Application.Contracts.User;
+using DevInsightForge.Application.Results;
 
 namespace DevInsightForge.Application.Features.Authentication.Commands;
 
-public sealed record LoginCommand(LoginRequestDto Dto) : IRequest<LoginCommand, Task<Result<AuthSessionResponseDto>>>;
+public sealed record LoginCommand(LoginRequestDto Request) : IRequest<LoginCommand, Task<Result<AuthSessionResponseDto>>>;
 
 internal sealed class LoginCommandHandler(
     IEncryptionService encryptionService,
@@ -17,18 +17,18 @@ internal sealed class LoginCommandHandler(
     IUnitOfWork unitOfWork,
     IValidator<LoginRequestDto> loginValidator) : IRequestHandler<LoginCommand, Task<Result<AuthSessionResponseDto>>>
 {
-    public async Task<Result<AuthSessionResponseDto>> Handle(LoginCommand request, CancellationToken ct)
+    public async Task<Result<AuthSessionResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await loginValidator.ValidateAsync(request.Dto, ct);
+        var validationResult = await loginValidator.ValidateAsync(request.Request, cancellationToken);
         if (!validationResult.IsValid)
         {
             return Result<AuthSessionResponseDto>.ValidationFailure(validationResult);
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var normalizedEmail = request.Request.Email.Trim().ToLowerInvariant();
         var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
 
-        if (user is null || !encryptionService.VerifyPassword(user.PasswordHash, request.Dto.Password))
+        if (user is null || !encryptionService.VerifyPassword(user.PasswordHash, request.Request.Password))
         {
             return Result<AuthSessionResponseDto>.Failure(
                 new Error("auth.invalid_credentials", "Invalid credentials.", ErrorType.Unauthorized));
@@ -45,9 +45,9 @@ internal sealed class LoginCommandHandler(
         {
             await unitOfWork.Users.UpdateAsync(user, innerCt);
             await unitOfWork.SaveChangesAsync(innerCt);
-        }, ct);
+        }, cancellationToken);
 
-        await SendLoginAlertEmailAsync(emailService, user.Email, ct);
+        await SendLoginAlertEmailAsync(emailService, user.Email, cancellationToken);
 
         var (token, expiry) = tokenService.GenerateJwtToken(CreateClaims(user.Id, user.Email));
 
@@ -55,7 +55,7 @@ internal sealed class LoginCommandHandler(
         {
             AccessToken = token,
             AccessTokenExpiresAt = expiry,
-            User = user.Adapt<UserResponseModel>()
+            User = user.Adapt<UserResponseDto>()
         });
     }
 
@@ -69,7 +69,7 @@ internal sealed class LoginCommandHandler(
     private static async Task SendLoginAlertEmailAsync(
         IEmailService emailService,
         string userEmail,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
         var loginDateTime = DateTime.UtcNow.ToString("f");
         var emailBody = $"""
@@ -95,7 +95,7 @@ internal sealed class LoginCommandHandler(
                 Subject = "Login Alert - DevInsightForge",
                 Body = emailBody,
                 IsHtml = true
-            }, ct);
+            }, cancellationToken);
         }
         catch
         {
@@ -103,3 +103,6 @@ internal sealed class LoginCommandHandler(
         }
     }
 }
+
+
+

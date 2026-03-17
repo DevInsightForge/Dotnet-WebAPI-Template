@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.Authentication;
+namespace DevInsightForge.Application.Contracts.Authentication;
 
 public sealed class VerifyEmailOtpRequestDto
 {
@@ -20,3 +20,6 @@ public sealed class VerifyEmailOtpRequestDtoValidator : AbstractValidator<Verify
             .Matches("^[0-9]{6}$").WithMessage("OTP must contain only digits.");
     }
 }
+
+
+

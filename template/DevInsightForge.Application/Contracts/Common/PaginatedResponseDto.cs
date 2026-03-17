@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.Common;
+namespace DevInsightForge.Application.Contracts.Common;
 
 public class PaginatedResponseDto<T>
 {
@@ -10,3 +10,6 @@ public class PaginatedResponseDto<T>
     public bool HasPreviousPage => CurrentPageNumber > 1;
     public IEnumerable<T> Data { get; set; } = [];
 }
+
+
+

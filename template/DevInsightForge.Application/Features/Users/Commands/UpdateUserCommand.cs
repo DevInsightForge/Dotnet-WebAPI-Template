@@ -1,48 +1,48 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Results;
 
 namespace DevInsightForge.Application.Features.Users.Commands;
 
-public sealed record UpdateUserCommand(Guid UserId, UpdateUserRequestDto Dto) : IRequest<UpdateUserCommand, Task<Result<UserResponseModel>>>;
+public sealed record UpdateUserCommand(Guid UserId, UpdateUserRequestDto Request) : IRequest<UpdateUserCommand, Task<Result<UserResponseDto>>>;
 
 internal sealed class UpdateUserCommandHandler(
     IUnitOfWork unitOfWork,
     IEncryptionService encryptionService,
-    IValidator<UpdateUserRequestDto> updateUserValidator) : IRequestHandler<UpdateUserCommand, Task<Result<UserResponseModel>>>
+    IValidator<UpdateUserRequestDto> updateUserValidator) : IRequestHandler<UpdateUserCommand, Task<Result<UserResponseDto>>>
 {
-    public async Task<Result<UserResponseModel>> Handle(UpdateUserCommand request, CancellationToken ct)
+    public async Task<Result<UserResponseDto>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await updateUserValidator.ValidateAsync(request.Dto, ct);
+        var validationResult = await updateUserValidator.ValidateAsync(request.Request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return Result<UserResponseModel>.ValidationFailure(validationResult);
+            return Result<UserResponseDto>.ValidationFailure(validationResult);
         }
 
         var user = await unitOfWork.Users.GetByIdAsync(request.UserId);
         if (user is null)
         {
-            return Result<UserResponseModel>.Failure(
+            return Result<UserResponseDto>.Failure(
                 new Error("user.not_found", "User not found.", ErrorType.NotFound));
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var normalizedEmail = request.Request.Email.Trim().ToLowerInvariant();
         var existingWithSameEmail = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
         if (existingWithSameEmail is not null && existingWithSameEmail.Id != user.Id)
         {
-            return Result<UserResponseModel>.Failure(
+            return Result<UserResponseDto>.Failure(
                 new Error("user.email_conflict", "Email is already registered.", ErrorType.Conflict));
         }
 
-        user.SetEmail(request.Dto.Email);
+        user.SetEmail(request.Request.Email);
 
-        if (!string.IsNullOrWhiteSpace(request.Dto.Password))
+        if (!string.IsNullOrWhiteSpace(request.Request.Password))
         {
-            user.SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
+            user.SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
         }
 
-        if (request.Dto.IsEmailVerified)
+        if (request.Request.IsEmailVerified)
         {
             user.MarkEmailAsVerified();
         }
@@ -51,8 +51,11 @@ internal sealed class UpdateUserCommandHandler(
         {
             await unitOfWork.Users.UpdateAsync(user, innerCt);
             await unitOfWork.SaveChangesAsync(innerCt);
-        }, ct);
+        }, cancellationToken);
 
-        return Result<UserResponseModel>.Success(user.Adapt<UserResponseModel>());
+        return Result<UserResponseDto>.Success(user.Adapt<UserResponseDto>());
     }
 }
+
+
+

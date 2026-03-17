@@ -1,12 +1,12 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.Common;
+using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Results;
 
 namespace DevInsightForge.Application.Features.Users.Queries;
 
 public sealed record GetUsersQuery(int PageNumber = 1, int PageSize = 10)
-    : IRequest<GetUsersQuery, Task<Result<PaginatedResponseDto<UserResponseModel>>>>;
+    : IRequest<GetUsersQuery, Task<Result<PaginatedResponseDto<UserResponseDto>>>>;
 
 public sealed class GetUsersQueryValidator : AbstractValidator<GetUsersQuery>
 {
@@ -22,25 +22,28 @@ public sealed class GetUsersQueryValidator : AbstractValidator<GetUsersQuery>
 
 internal sealed class GetUsersQueryHandler(
     IUnitOfWork unitOfWork,
-    IValidator<GetUsersQuery> getUsersValidator) : IRequestHandler<GetUsersQuery, Task<Result<PaginatedResponseDto<UserResponseModel>>>>
+    IValidator<GetUsersQuery> getUsersValidator) : IRequestHandler<GetUsersQuery, Task<Result<PaginatedResponseDto<UserResponseDto>>>>
 {
-    public async Task<Result<PaginatedResponseDto<UserResponseModel>>> Handle(GetUsersQuery request, CancellationToken ct)
+    public async Task<Result<PaginatedResponseDto<UserResponseDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var validationResult = await getUsersValidator.ValidateAsync(request, ct);
+        var validationResult = await getUsersValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return Result<PaginatedResponseDto<UserResponseModel>>.ValidationFailure(validationResult);
+            return Result<PaginatedResponseDto<UserResponseDto>>.ValidationFailure(validationResult);
         }
 
         var users = await unitOfWork.Users.GetAllAsync(request.PageNumber, request.PageSize);
-        var response = new PaginatedResponseDto<UserResponseModel>
+        var response = new PaginatedResponseDto<UserResponseDto>
         {
             TotalRecords = users.TotalRecords,
             CurrentPageNumber = users.CurrentPageNumber,
             PageSize = users.PageSize,
-            Data = users.Data.Adapt<IEnumerable<UserResponseModel>>()
+            Data = users.Data.Adapt<IEnumerable<UserResponseDto>>()
         };
 
-        return Result<PaginatedResponseDto<UserResponseModel>>.Success(response);
+        return Result<PaginatedResponseDto<UserResponseDto>>.Success(response);
     }
 }
+
+
+

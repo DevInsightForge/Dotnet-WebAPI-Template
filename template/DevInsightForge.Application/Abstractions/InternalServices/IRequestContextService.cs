@@ -1,6 +1,8 @@
-namespace DevInsightForge.Application.Abstructions.Core;
+namespace DevInsightForge.Application.Abstractions.InternalServices;
 
 public interface IRequestContextService
 {
     Guid? RequestUserId { get; }
 }
+
+

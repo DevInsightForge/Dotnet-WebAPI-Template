@@ -1,10 +1,10 @@
-﻿using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.Common;
+using System.Linq.Expressions;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Domain.Entities.Base;
 using DevInsightForge.Persistence.DataAccess.Extensions;
 using DevInsightForge.Persistence.DataContext;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace DevInsightForge.Persistence.DataAccess;
 
@@ -53,3 +53,5 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         return await _dbSet.Where(predicate).AsNoTracking().IncludeNavigations(includes).ToPaginatedResultAsync(pageNumber, pageSize);
     }
 }
+
+

@@ -1,12 +1,12 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.Authentication;
-using DevInsightForge.Application.DtoModels.Common;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.Authentication;
+using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Application.Results;
 
 namespace DevInsightForge.Application.Features.Authentication.Commands;
 
-public sealed record ResendEmailVerificationOtpCommand(ResendEmailVerificationOtpRequestDto Dto) : IRequest<ResendEmailVerificationOtpCommand, Task<Result>>;
+public sealed record ResendEmailVerificationOtpCommand(ResendEmailVerificationOtpRequestDto Request) : IRequest<ResendEmailVerificationOtpCommand, Task<Result>>;
 
 internal sealed class ResendEmailVerificationOtpCommandHandler(
     IOtpService otpService,
@@ -14,15 +14,15 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
     IUnitOfWork unitOfWork,
     IValidator<ResendEmailVerificationOtpRequestDto> validator) : IRequestHandler<ResendEmailVerificationOtpCommand, Task<Result>>
 {
-    public async Task<Result> Handle(ResendEmailVerificationOtpCommand request, CancellationToken ct)
+    public async Task<Result> Handle(ResendEmailVerificationOtpCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(request.Dto, ct);
+        var validationResult = await validator.ValidateAsync(request.Request, cancellationToken);
         if (!validationResult.IsValid)
         {
             return Result.ValidationFailure(validationResult);
         }
 
-        var normalizedEmail = request.Dto.Email.Trim().ToLowerInvariant();
+        var normalizedEmail = request.Request.Email.Trim().ToLowerInvariant();
         var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
         if (user is null)
         {
@@ -35,7 +35,7 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
         }
 
         var (otpCode, expiresAtUtc) = otpService.GenerateEmailVerificationOtp(user.Email);
-        await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, ct);
+        await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, cancellationToken);
         return Result.Success();
     }
 
@@ -44,7 +44,7 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
         string userEmail,
         string otpCode,
         DateTime expiresAtUtc,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
         var ttlMinutes = Math.Max(1, (int)Math.Ceiling((expiresAtUtc - DateTime.UtcNow).TotalMinutes));
         var emailBody = $"""
@@ -71,7 +71,7 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
                 Subject = "DevInsightForge email verification OTP",
                 Body = emailBody,
                 IsHtml = true
-            }, ct);
+            }, cancellationToken);
         }
         catch
         {
@@ -79,3 +79,6 @@ internal sealed class ResendEmailVerificationOtpCommandHandler(
         }
     }
 }
+
+
+

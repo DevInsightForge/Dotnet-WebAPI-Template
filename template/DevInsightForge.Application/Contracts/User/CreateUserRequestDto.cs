@@ -1,6 +1,6 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.Abstractions.DataAccess;
 
-namespace DevInsightForge.Application.DtoModels.User;
+namespace DevInsightForge.Application.Contracts.User;
 
 public sealed class CreateUserRequestDto
 {
@@ -29,9 +29,12 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .WithMessage("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
     }
 
-    private async Task<bool> BeUniqueEmail(string email, CancellationToken ct)
+    private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         return !await _unitOfWork.Users.AnyAsync(u => u.Email == normalizedEmail);
     }
 }
+
+
+

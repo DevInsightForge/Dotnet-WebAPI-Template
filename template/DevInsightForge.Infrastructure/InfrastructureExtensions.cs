@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions;
+using DevInsightForge.Application.Abstractions;
 using DevInsightForge.Infrastructure.Configurations;
 using DevInsightForge.Infrastructure.ExternalServices;
 using DevInsightForge.Infrastructure.Services;
@@ -32,5 +32,6 @@ public static class InfrastructureExtensions
         services.AddScoped<IEmailService, EmailService>();
     }
 }
+
 
 

@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.Common;
+namespace DevInsightForge.Application.Contracts.Common;
 
 public sealed class EmailMessageDto
 {
@@ -8,3 +8,6 @@ public sealed class EmailMessageDto
     public bool IsHtml { get; set; }
     public IEnumerable<string>? Cc { get; set; }
 }
+
+
+

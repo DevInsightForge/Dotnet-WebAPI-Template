@@ -43,3 +43,4 @@ internal class UserConfiguration : BaseEntityConfiguration<User>
         });
     }
 }
+

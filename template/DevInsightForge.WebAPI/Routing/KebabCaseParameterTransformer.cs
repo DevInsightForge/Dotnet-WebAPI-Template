@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Routing;
 using System.Text.RegularExpressions;
 
 namespace DevInsightForge.WebAPI.Routing;
@@ -23,3 +22,4 @@ public sealed class KebabCaseParameterTransformer : IOutboundParameterTransforme
         return SplitWordsRegex.Replace(valueAsString, "$1-$2").ToLowerInvariant();
     }
 }
+

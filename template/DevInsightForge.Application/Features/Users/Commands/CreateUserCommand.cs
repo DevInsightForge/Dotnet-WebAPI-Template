@@ -1,30 +1,30 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Results;
 using DevInsightForge.Domain.Entities;
 
 namespace DevInsightForge.Application.Features.Users.Commands;
 
-public sealed record CreateUserCommand(CreateUserRequestDto Dto) : IRequest<CreateUserCommand, Task<Result<UserResponseModel>>>;
+public sealed record CreateUserCommand(CreateUserRequestDto Request) : IRequest<CreateUserCommand, Task<Result<UserResponseDto>>>;
 
 internal sealed class CreateUserCommandHandler(
     IUnitOfWork unitOfWork,
     IEncryptionService encryptionService,
-    IValidator<CreateUserRequestDto> createUserValidator) : IRequestHandler<CreateUserCommand, Task<Result<UserResponseModel>>>
+    IValidator<CreateUserRequestDto> createUserValidator) : IRequestHandler<CreateUserCommand, Task<Result<UserResponseDto>>>
 {
-    public async Task<Result<UserResponseModel>> Handle(CreateUserCommand request, CancellationToken ct)
+    public async Task<Result<UserResponseDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await createUserValidator.ValidateAsync(request.Dto, ct);
+        var validationResult = await createUserValidator.ValidateAsync(request.Request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return Result<UserResponseModel>.ValidationFailure(validationResult);
+            return Result<UserResponseDto>.ValidationFailure(validationResult);
         }
 
-        var user = User.Create(request.Dto.Email.Trim())
-            .SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
+        var user = User.Create(request.Request.Email.Trim())
+            .SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
 
-        if (request.Dto.IsEmailVerified)
+        if (request.Request.IsEmailVerified)
         {
             user.MarkEmailAsVerified();
         }
@@ -33,8 +33,11 @@ internal sealed class CreateUserCommandHandler(
         {
             await unitOfWork.Users.AddAsync(user, innerCt);
             await unitOfWork.SaveChangesAsync(innerCt);
-        }, ct);
+        }, cancellationToken);
 
-        return Result<UserResponseModel>.Created(user.Adapt<UserResponseModel>());
+        return Result<UserResponseDto>.Created(user.Adapt<UserResponseDto>());
     }
 }
+
+
+

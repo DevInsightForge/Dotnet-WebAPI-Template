@@ -1,5 +1,4 @@
 using DevInsightForge.Domain.Entities.Base;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DevInsightForge.Persistence.Configurations.Base;
@@ -22,3 +21,4 @@ public abstract class BaseAuditableEntityConfiguration<TEntity> : BaseEntityConf
             .IsRequired();
     }
 }
+

@@ -1,5 +1,5 @@
-using DevInsightForge.Application.Abstructions.Core;
 using System.Security.Claims;
+using DevInsightForge.Application.Abstractions.InternalServices;
 
 namespace DevInsightForge.WebAPI.Services;
 
@@ -20,3 +20,4 @@ public class HttpRequestContextService(IHttpContextAccessor httpContextAccessor)
 
     public Guid? RequestUserId => _userId.Value;
 }
+

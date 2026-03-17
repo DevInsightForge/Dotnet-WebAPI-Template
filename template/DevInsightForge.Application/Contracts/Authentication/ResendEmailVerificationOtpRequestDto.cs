@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.Authentication;
+namespace DevInsightForge.Application.Contracts.Authentication;
 
 public sealed class ResendEmailVerificationOtpRequestDto
 {
@@ -14,3 +14,6 @@ public sealed class ResendEmailVerificationOtpRequestDtoValidator : AbstractVali
             .EmailAddress().WithMessage("Invalid email format.");
     }
 }
+
+
+

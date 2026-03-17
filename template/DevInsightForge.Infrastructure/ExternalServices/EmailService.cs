@@ -1,9 +1,9 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Infrastructure.Configurations;
-using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Application.Contracts.Common;
+using DevInsightForge.Infrastructure.Configurations;
+using Microsoft.Extensions.Options;
 
 namespace DevInsightForge.Infrastructure.ExternalServices;
 
@@ -47,3 +47,5 @@ public class EmailService(IOptions<EmailConfiguration> emailOptions) : IEmailSer
         await smtpClient.SendMailAsync(mailMessage, ct);
     }
 }
+
+

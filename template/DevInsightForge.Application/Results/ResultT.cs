@@ -36,3 +36,5 @@ public sealed record Result<T> : Result
     internal static new Result<T> ValidationFailure(ValidationResult validationResult) =>
         ValidationFailure(CreateValidationError(validationResult));
 }
+
+

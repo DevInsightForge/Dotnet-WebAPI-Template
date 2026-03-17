@@ -1,9 +1,9 @@
-using DevInsightForge.WebAPI.Contracts;
-using DevInsightForge.Infrastructure.Configurations;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using DevInsightForge.Infrastructure.Configurations;
+using DevInsightForge.WebAPI.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DevInsightForge.WebAPI.Extensions;
 
@@ -78,3 +78,4 @@ public static class JwtAuthenticationExtensions
         };
     }
 }
+

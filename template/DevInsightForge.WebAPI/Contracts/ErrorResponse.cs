@@ -9,3 +9,4 @@ public sealed record ErrorResponse
     public string? Instance { get; init; }
     public IReadOnlyList<string>? Errors { get; init; }
 }
+

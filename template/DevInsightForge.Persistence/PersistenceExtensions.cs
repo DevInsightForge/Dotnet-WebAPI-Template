@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.Abstractions.DataAccess;
 using DevInsightForge.Persistence.DataAccess;
 using DevInsightForge.Persistence.DataContext;
 using DevInsightForge.Persistence.DataContext.Interceptors;
@@ -24,3 +24,4 @@ public static class PersistenceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
+

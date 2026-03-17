@@ -20,3 +20,4 @@ public class JwtConfiguration
     [Range(5, 60 * 24)]
     public double AccessTokenExpirationInMinutes { get; set; } = 60;
 }
+

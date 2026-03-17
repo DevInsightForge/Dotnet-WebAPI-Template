@@ -1,8 +1,8 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Infrastructure.Configurations;
-using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
+using DevInsightForge.Application.Abstractions;
+using DevInsightForge.Infrastructure.Configurations;
+using Microsoft.Extensions.Options;
 
 namespace DevInsightForge.Infrastructure.Services;
 
@@ -71,3 +71,4 @@ public class OtpService(IOptions<ApplicationConfiguration> applicationOptions) :
         return otp.ToString("D6");
     }
 }
+

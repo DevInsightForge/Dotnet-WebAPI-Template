@@ -1,6 +1,6 @@
 using DevInsightForge.Domain.Entities.Base;
 
-namespace DevInsightForge.Application.DtoModels.Common;
+namespace DevInsightForge.Application.Contracts.Common;
 
 public class PaginatedDto<TEntity> where TEntity : BaseEntity
 {
@@ -12,5 +12,8 @@ public class PaginatedDto<TEntity> where TEntity : BaseEntity
     public bool HasPreviousPage => CurrentPageNumber > 1;
     public IEnumerable<TEntity> Data { get; set; } = [];
 }
+
+
+
 
 

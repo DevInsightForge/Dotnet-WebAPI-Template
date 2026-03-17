@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.User;
+namespace DevInsightForge.Application.Contracts.User;
 
 public sealed class UpdateUserRequestDto
 {
@@ -22,3 +22,6 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
             .When(dto => !string.IsNullOrWhiteSpace(dto.Password));
     }
 }
+
+
+

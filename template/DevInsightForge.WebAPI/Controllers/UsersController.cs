@@ -1,5 +1,5 @@
-using DevInsightForge.Application.DtoModels.Common;
-using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Contracts.Common;
+using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Features.Users.Commands;
 using DevInsightForge.Application.Features.Users.Queries;
 using DevInsightForge.WebAPI.Contracts.Attributes;
@@ -13,32 +13,32 @@ namespace DevInsightForge.WebAPI.Controllers;
 public class UsersController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    [CreatedResponse<UserResponseModel>]
-    public async Task<ActionResult<UserResponseModel>> CreateUser(CreateUserRequestDto request, CancellationToken cancellationToken)
+    [CreatedResponse<UserResponseDto>]
+    public async Task<ActionResult<UserResponseDto>> CreateUser(CreateUserRequestDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new CreateUserCommand(request), cancellationToken);
         return result.ToCreatedActionResult();
     }
 
     [HttpGet("{id:guid}")]
-    [SuccessResponse<UserResponseModel>]
-    public async Task<ActionResult<UserResponseModel>> GetUserById(Guid id, CancellationToken cancellationToken)
+    [SuccessResponse<UserResponseDto>]
+    public async Task<ActionResult<UserResponseDto>> GetUserById(Guid id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetUserByIdQuery(id), cancellationToken);
         return result.ToOkActionResult();
     }
 
     [HttpGet]
-    [SuccessResponse<PaginatedResponseDto<UserResponseModel>>]
-    public async Task<ActionResult<PaginatedResponseDto<UserResponseModel>>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    [SuccessResponse<PaginatedResponseDto<UserResponseDto>>]
+    public async Task<ActionResult<PaginatedResponseDto<UserResponseDto>>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var result = await mediator.Send(new GetUsersQuery(pageNumber, pageSize), cancellationToken);
         return result.ToOkActionResult();
     }
 
     [HttpPut("{id:guid}")]
-    [SuccessResponse<UserResponseModel>]
-    public async Task<ActionResult<UserResponseModel>> UpdateUser(Guid id, UpdateUserRequestDto request, CancellationToken cancellationToken)
+    [SuccessResponse<UserResponseDto>]
+    public async Task<ActionResult<UserResponseDto>> UpdateUser(Guid id, UpdateUserRequestDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new UpdateUserCommand(id, request), cancellationToken);
         return result.ToOkActionResult();
@@ -52,3 +52,5 @@ public class UsersController(IMediator mediator) : ControllerBase
         return result.ToNoContentActionResult();
     }
 }
+
+

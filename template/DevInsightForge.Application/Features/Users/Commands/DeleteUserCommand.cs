@@ -1,4 +1,4 @@
-using DevInsightForge.Application.Abstructions.DataAccess;
+using DevInsightForge.Application.Abstractions.DataAccess;
 using DevInsightForge.Application.Results;
 
 namespace DevInsightForge.Application.Features.Users.Commands;
@@ -8,7 +8,7 @@ public sealed record DeleteUserCommand(Guid UserId) : IRequest<DeleteUserCommand
 internal sealed class DeleteUserCommandHandler(
     IUnitOfWork unitOfWork) : IRequestHandler<DeleteUserCommand, Task<Result>>
 {
-    public async Task<Result> Handle(DeleteUserCommand request, CancellationToken ct)
+    public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.Users.GetByIdAsync(request.UserId);
         if (user is null)
@@ -23,8 +23,10 @@ internal sealed class DeleteUserCommandHandler(
         {
             await unitOfWork.Users.UpdateAsync(user, innerCt);
             await unitOfWork.SaveChangesAsync(innerCt);
-        }, ct);
+        }, cancellationToken);
 
         return Result.Success();
     }
 }
+
+

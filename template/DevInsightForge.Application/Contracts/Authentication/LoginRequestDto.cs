@@ -1,4 +1,4 @@
-namespace DevInsightForge.Application.DtoModels.Authentication;
+namespace DevInsightForge.Application.Contracts.Authentication;
 
 public sealed class LoginRequestDto
 {
@@ -18,3 +18,6 @@ public sealed class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto
             .NotEmpty().WithMessage("Password is required.");
     }
 }
+
+
+

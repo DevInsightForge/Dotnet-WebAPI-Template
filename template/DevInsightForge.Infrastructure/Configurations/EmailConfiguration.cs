@@ -20,3 +20,4 @@ public class EmailConfiguration
 
     public string SmtpPassword { get; set; } = string.Empty;
 }
+

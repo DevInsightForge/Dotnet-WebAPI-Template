@@ -21,3 +21,4 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
         builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }
+

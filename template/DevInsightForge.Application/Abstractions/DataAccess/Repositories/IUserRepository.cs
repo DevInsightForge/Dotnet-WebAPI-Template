@@ -1,9 +1,11 @@
 using DevInsightForge.Domain.Entities;
 
-namespace DevInsightForge.Application.Abstructions.DataAccess.Repositories;
+namespace DevInsightForge.Application.Abstractions.DataAccess.Repositories;
 
 public interface IUserRepository : IGenericRepository<User>
 {
 }
+
+
 
 

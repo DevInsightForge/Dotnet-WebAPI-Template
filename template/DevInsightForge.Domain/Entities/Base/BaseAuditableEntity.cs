@@ -1,5 +1,3 @@
-using DevInsightForge.Domain.Entities;
-
 namespace DevInsightForge.Domain.Entities.Base;
 
 public abstract class BaseAuditableEntity : BaseEntity
@@ -30,3 +28,4 @@ public abstract class BaseAuditableEntity : BaseEntity
 
     public bool HasBeenModified() => CreatedOn != ModifiedOn;
 }
+

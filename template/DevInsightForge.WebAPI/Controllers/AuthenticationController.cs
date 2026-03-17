@@ -1,5 +1,5 @@
-using DevInsightForge.Application.DtoModels.Authentication;
-using DevInsightForge.Application.DtoModels.User;
+using DevInsightForge.Application.Contracts.Authentication;
+using DevInsightForge.Application.Contracts.User;
 using DevInsightForge.Application.Features.Authentication.Commands;
 using DevInsightForge.Application.Features.Authentication.Queries;
 using DevInsightForge.WebAPI.Contracts.Attributes;
@@ -50,10 +50,12 @@ public class AuthenticationController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("authenticated-user")]
-    [SuccessResponse<UserResponseModel>]
-    public async Task<ActionResult<UserResponseModel>> GetCurrentUser(CancellationToken cancellationToken)
+    [SuccessResponse<UserResponseDto>]
+    public async Task<ActionResult<UserResponseDto>> GetCurrentUser(CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetCurrentUserQuery(), cancellationToken);
         return result.ToOkActionResult();
     }
 }
+
+

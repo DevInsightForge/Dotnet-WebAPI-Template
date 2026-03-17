@@ -1,4 +1,4 @@
-﻿using DevInsightForge.Application.Abstructions.Core;
+using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -48,4 +48,5 @@ public static class EntityEntryExtensions
             r.TargetEntry.Metadata.IsOwned() &&
             (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
 }
+
 

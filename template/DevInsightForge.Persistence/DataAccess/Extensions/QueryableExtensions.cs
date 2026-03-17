@@ -1,7 +1,7 @@
-using DevInsightForge.Application.DtoModels.Common;
+using System.Linq.Expressions;
+using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace DevInsightForge.Persistence.DataAccess.Extensions;
 
@@ -36,5 +36,7 @@ public static class QueryableExtensions
         };
     }
 }
+
+
 
 
