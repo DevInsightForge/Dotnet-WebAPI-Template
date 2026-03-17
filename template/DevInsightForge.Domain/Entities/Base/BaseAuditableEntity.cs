@@ -1,5 +1,3 @@
-using DevInsightForge.Domain.Entities;
-
 namespace DevInsightForge.Domain.Entities.Base;
 
 public abstract class BaseAuditableEntity : BaseEntity
@@ -9,10 +7,8 @@ public abstract class BaseAuditableEntity : BaseEntity
     public Guid? ModifiedByUserId { get; private set; }
     public DateTime ModifiedOn { get; private set; }
 
-    #region Foreign Key Relations
-    public virtual UserModel? CreatedByUser { get; }
-    public virtual UserModel? ModifiedByUser { get; }
-    #endregion
+    public virtual User? CreatedByUser { get; }
+    public virtual User? ModifiedByUser { get; }
 
     public void SetCreationAudit(Guid? createdByUserId)
     {
@@ -32,3 +28,4 @@ public abstract class BaseAuditableEntity : BaseEntity
 
     public bool HasBeenModified() => CreatedOn != ModifiedOn;
 }
+

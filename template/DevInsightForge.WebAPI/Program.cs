@@ -11,13 +11,14 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
-builder.Services.AddApplicationServices();
-builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebAPIServices(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddWebApiServices(builder.Configuration);
 
 // Initialize app from builder
 var app = builder.Build();
-app.UseWebAPIServices();
+app.UseWebApiServices();
 
 await app.RunAsync();
+

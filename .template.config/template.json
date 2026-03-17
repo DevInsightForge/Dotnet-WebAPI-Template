@@ -5,7 +5,7 @@
   "description": "Template for a DevInsightForge Web API project with Clean Architecture, MediatR, EF Core, and JWT authentication.",
   "identity": "DevInsightForge.Templates.Api",
   "groupIdentity": "DevInsightForge.Templates.Api",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "shortName": "devforgeapi",
   "defaultName": "DevInsightForge",
   "precedence": 100,

@@ -1,39 +1,41 @@
-using DevInsightForge.Application.Abstructions;
-using DevInsightForge.Application.Abstructions.DataAccess;
-using DevInsightForge.Application.DtoModels.Authentication;
-using DevInsightForge.Application.DtoModels.Common;
+using DevInsightForge.Application.Abstractions.DataAccess;
+using DevInsightForge.Application.Abstractions.ExternalServices;
+using DevInsightForge.Application.Abstractions.InternalServices;
+using DevInsightForge.Application.Contracts.Authentication;
+using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Application.Results;
 using DevInsightForge.Domain.Entities;
 
 namespace DevInsightForge.Application.Features.Authentication.Commands;
 
-public sealed record RegisterCommand(RegisterRequestDto Dto) : IRequest<RegisterCommand, Task<Result>>;
+public sealed record RegisterCommand(RegisterRequestDto Request) : IRequest<RegisterCommand, Task<Result>>;
 
 internal sealed class RegisterCommandHandler(
     IEncryptionService encryptionService,
+    IOtpService otpService,
     IEmailService emailService,
     IUnitOfWork unitOfWork,
     IValidator<RegisterRequestDto> registerValidator) : IRequestHandler<RegisterCommand, Task<Result>>
 {
-    public async Task<Result> Handle(RegisterCommand request, CancellationToken ct)
+    public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await registerValidator.ValidateAsync(request.Dto, ct);
+        var validationResult = await registerValidator.ValidateAsync(request.Request, cancellationToken);
         if (!validationResult.IsValid)
         {
             return Result.ValidationFailure(validationResult);
         }
 
-        var user = UserModel.CreateUser(request.Dto.Email.Trim())
-            .SetPasswordHash(encryptionService.HashPassword(request.Dto.Password));
+        var user = User.Create(request.Request.Email.Trim())
+            .SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
 
         await unitOfWork.WithTransaction(async innerCt =>
         {
             await unitOfWork.Users.AddAsync(user, innerCt);
             await unitOfWork.SaveChangesAsync(innerCt);
-        }, ct);
+        }, cancellationToken);
 
-        var (otpCode, expiresAtUtc) = encryptionService.GenerateEmailVerificationOtp(user.Email);
-        await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, ct);
+        var (otpCode, expiresAtUtc) = otpService.GenerateEmailVerificationOtp(user.Email);
+        await SendVerificationEmailAsync(emailService, user.Email, otpCode, expiresAtUtc, cancellationToken);
 
         return Result.Created();
     }
@@ -43,7 +45,7 @@ internal sealed class RegisterCommandHandler(
         string userEmail,
         string otpCode,
         DateTime expiresAtUtc,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
         var ttlMinutes = Math.Max(1, (int)Math.Ceiling((expiresAtUtc - DateTime.UtcNow).TotalMinutes));
         var emailBody = $"""
@@ -73,7 +75,7 @@ internal sealed class RegisterCommandHandler(
                 Subject = "Verify your DevInsightForge account",
                 Body = emailBody,
                 IsHtml = true
-            }, ct);
+            }, cancellationToken);
         }
         catch
         {
@@ -81,3 +83,6 @@ internal sealed class RegisterCommandHandler(
         }
     }
 }
+
+
+

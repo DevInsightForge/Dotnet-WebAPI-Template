@@ -3,7 +3,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <PackageType>Template</PackageType>
     <PackageId>DevInsightForge.Templates.Api</PackageId>
-    <PackageVersion>4.0.0</PackageVersion>
+    <PackageVersion>4.1.0</PackageVersion>
     <Title>DevInsightForge Web API Template</Title>
     <Authors>Mofajjal Rasul</Authors>
     <Description>Template for a DevInsightForge Web API project.</Description>

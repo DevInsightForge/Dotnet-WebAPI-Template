@@ -1,13 +1,13 @@
-using DevInsightForge.Application.DtoModels.Common;
+using System.Linq.Expressions;
+using DevInsightForge.Application.Contracts.Common;
 using DevInsightForge.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace DevInsightForge.Persistence.DataAccess.Extensions;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<TEntity> IncludeMultiple<TEntity>(
+    public static IQueryable<TEntity> IncludeNavigations<TEntity>(
         this IQueryable<TEntity> query,
         params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
@@ -18,7 +18,7 @@ public static class QueryableExtensions
         return query;
     }
 
-    public static async Task<PaginatedDto<TEntity>> GetPaginatedResultAsync<TEntity>(
+    public static async Task<PaginatedDto<TEntity>> ToPaginatedResultAsync<TEntity>(
         this IQueryable<TEntity> query, int pageNumber, int pageSize) where TEntity : BaseEntity
     {
         var totalRecords = await query.CountAsync();
@@ -36,5 +36,7 @@ public static class QueryableExtensions
         };
     }
 }
+
+
 
 

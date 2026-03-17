@@ -1,0 +1,37 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using DevInsightForge.Application.Abstractions.InternalServices;
+using DevInsightForge.Infrastructure.Configurations;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+namespace DevInsightForge.Infrastructure.Services;
+
+public class TokenService(IOptions<JwtConfiguration> jwtSettings) : ITokenService
+{
+    private readonly JwtConfiguration _jwtSettings = jwtSettings.Value;
+
+    public (string token, DateTime expiry) GenerateJwtToken(List<Claim> claims)
+    {
+        var accessTokenExpiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes);
+        var tokenClaims = claims.Where(c => c.Type != JwtRegisteredClaimNames.Jti).ToList();
+        tokenClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.CreateVersion7().ToString()));
+
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+
+        var securityToken = new JwtSecurityToken(
+            issuer: _jwtSettings.ValidIssuer,
+            audience: _jwtSettings.ValidAudience,
+            expires: accessTokenExpiresAt,
+            claims: tokenClaims,
+            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+        );
+
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
+        return (accessToken, accessTokenExpiresAt);
+    }
+}
+
+
+

@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DevInsightForge.Persistence.Configurations.Base;
 
-public abstract class BaseEntityConfiguration<TBase> : IEntityTypeConfiguration<TBase>
-    where TBase : BaseEntity
+public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
+    where TEntity : BaseEntity
 {
-    public virtual void Configure(EntityTypeBuilder<TBase> builder)
+    public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
         builder.HasKey(t => t.Id);
 
@@ -21,3 +21,4 @@ public abstract class BaseEntityConfiguration<TBase> : IEntityTypeConfiguration<
         builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }
+
