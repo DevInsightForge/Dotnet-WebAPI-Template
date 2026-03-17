@@ -17,9 +17,10 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         await _dbSet.AddAsync(entity, ct);
     }
 
-    public async Task UpdateAsync(TEntity entity, CancellationToken ct = default)
+    public Task UpdateAsync(TEntity entity, CancellationToken ct = default)
     {
-        await Task.FromResult(_dbSet.Update(entity));
+        _dbSet.Update(entity);
+        return Task.CompletedTask;
     }
 
     public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = default)
@@ -37,22 +38,18 @@ public class GenericRepository<TEntity>(DatabaseContext dbContext) : IGenericRep
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<TEntity?> GetWhereAsync(Expression<Func<TEntity, bool>> where, params Expression<Func<TEntity, object>>[] include)
+    public async Task<TEntity?> GetWhereAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await _dbSet.AsNoTracking().AsQueryable().IncludeMultiple(include).FirstOrDefaultAsync(where);
+        return await _dbSet.AsNoTracking().AsQueryable().IncludeNavigations(includes).FirstOrDefaultAsync(predicate);
     }
 
-    public async Task<PaginatedDto<TEntity>> GetAllAsync(int pageNumber, int pageSize, params Expression<Func<TEntity, object>>[] include)
+    public async Task<PaginatedDto<TEntity>> GetAllAsync(int pageNumber, int pageSize, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await _dbSet.AsNoTracking().IncludeMultiple(include).GetPaginatedResultAsync(pageNumber, pageSize);
+        return await _dbSet.AsNoTracking().IncludeNavigations(includes).ToPaginatedResultAsync(pageNumber, pageSize);
     }
 
-    public async Task<PaginatedDto<TEntity>> GetAllWhereAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> where, params Expression<Func<TEntity, object>>[] include)
+    public async Task<PaginatedDto<TEntity>> GetAllWhereAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await _dbSet.Where(where).AsNoTracking().IncludeMultiple(include).GetPaginatedResultAsync(pageNumber, pageSize);
+        return await _dbSet.Where(predicate).AsNoTracking().IncludeNavigations(includes).ToPaginatedResultAsync(pageNumber, pageSize);
     }
 }
-
-
-
-

@@ -14,10 +14,10 @@ public class AuditableEntityInterceptor(IRequestContextService requestContext) :
         return base.SavingChanges(eventData, result);
     }
 
-    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken ct = default)
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         UpdateEntities(eventData.Context);
-        return await base.SavingChangesAsync(eventData, result, ct);
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
     private void UpdateEntities(DbContext? context)
@@ -32,7 +32,7 @@ public class AuditableEntityInterceptor(IRequestContextService requestContext) :
                 entry.Entity.SetCreationAudit(requestContext.RequestUserId);
             }
 
-            if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+            if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedReferences())
             {
                 entry.Entity.SetModificationAudit(requestContext.RequestUserId);
             }
@@ -40,14 +40,12 @@ public class AuditableEntityInterceptor(IRequestContextService requestContext) :
     }
 }
 
-public static class Extensions
+public static class EntityEntryExtensions
 {
-    public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
+    public static bool HasChangedOwnedReferences(this EntityEntry entry) =>
         entry.References.Any(r =>
             r.TargetEntry != null &&
             r.TargetEntry.Metadata.IsOwned() &&
             (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
 }
-
-
 

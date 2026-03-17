@@ -8,13 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DevInsightForge.Persistence;
 
-public static class PersistenceServices
+public static class PersistenceExtensions
 {
-    public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<AuditableEntityInterceptor>();
 
-        // Configure DbContext provider
         services.AddDbContext<DatabaseContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<AuditableEntityInterceptor>());
@@ -22,7 +21,6 @@ public static class PersistenceServices
                 npgsql => npgsql.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName));
         });
 
-        // Register data-access services
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
