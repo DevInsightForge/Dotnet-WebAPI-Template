@@ -35,12 +35,6 @@ internal sealed class LoginCommandHandler(
                 new Error("auth.invalid_credentials", "Invalid credentials.", ErrorType.Unauthorized));
         }
 
-        if (!user.IsEmailVerified)
-        {
-            return Result<AuthSessionResponseDto>.Failure(
-                new Error("auth.email_not_verified", "Email address is not verified.", ErrorType.Forbidden));
-        }
-
         user.UpdateLastLogin();
         await unitOfWork.WithTransaction(async innerCt =>
         {

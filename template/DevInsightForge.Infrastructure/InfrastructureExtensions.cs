@@ -17,18 +17,12 @@ public static class InfrastructureExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<ApplicationConfiguration>()
-            .Bind(configuration.GetSection("ApplicationConfiguration"))
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-
         services.AddOptions<EmailConfiguration>()
             .Bind(configuration.GetSection("EmailConfiguration"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
         services.AddScoped<IEncryptionService, EncryptionService>();
-        services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
     }

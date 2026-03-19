@@ -97,7 +97,13 @@ Do not introduce reverse or circular dependencies.
 
 Use the solution root as working directory.
 
-- Never edit migration files manually; always create/update/remove migrations using EF CLI commands.
+- Never edit migration files manually.
+- For schema changes, remove/drop the affected migration and regenerate it using EF CLI commands only.
+- If a migration is wrong, fix entity/configuration code first, then regenerate migration files via CLI.
+
+```bash
+dotnet ef migrations remove --project DevInsightForge.Persistence --startup-project DevInsightForge.WebAPI
+```
 
 ```bash
 dotnet ef migrations add <MigrationName> --project DevInsightForge.Persistence --startup-project DevInsightForge.WebAPI

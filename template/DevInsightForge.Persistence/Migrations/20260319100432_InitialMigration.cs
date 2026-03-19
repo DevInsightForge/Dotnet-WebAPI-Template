@@ -18,7 +18,6 @@ namespace DevInsightForge.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     PasswordHash = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    IsEmailVerified = table.Column<bool>(type: "boolean", nullable: false),
                     DateJoined = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
@@ -30,8 +29,8 @@ namespace DevInsightForge.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "DateJoined", "Email", "IsEmailVerified", "LastLogin", "PasswordHash" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@system.local", true, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2a$12$ByCcav7akmgD92OJcyegQe38aeIWvJj0wroOQjCKo0MG7nL3Yh7Qa" });
+                columns: new[] { "Id", "DateJoined", "Email", "LastLogin", "PasswordHash" },
+                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@system.local", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2a$12$ByCcav7akmgD92OJcyegQe38aeIWvJj0wroOQjCKo0MG7nL3Yh7Qa" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

@@ -24,11 +24,6 @@ internal sealed class CreateUserCommandHandler(
         var user = User.Create(request.Request.Email.Trim())
             .SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
 
-        if (request.Request.IsEmailVerified)
-        {
-            user.MarkEmailAsVerified();
-        }
-
         await unitOfWork.WithTransaction(async innerCt =>
         {
             await unitOfWork.Users.AddAsync(user, innerCt);

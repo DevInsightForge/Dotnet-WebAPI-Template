@@ -6,7 +6,6 @@ public class User : BaseEntity
 {
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public bool IsEmailVerified { get; private set; }
     public DateTime DateJoined { get; private set; }
     public DateTime LastLogin { get; private set; }
 
@@ -37,12 +36,6 @@ public class User : BaseEntity
         ArgumentException.ThrowIfNullOrEmpty(passwordHash.Trim(), nameof(passwordHash));
 
         PasswordHash = passwordHash;
-        return this;
-    }
-
-    public User MarkEmailAsVerified()
-    {
-        IsEmailVerified = true;
         return this;
     }
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DevInsightForge.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260317075218_InitialMigration")]
+    [Migration("20260319100432_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -43,9 +43,6 @@ namespace DevInsightForge.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("timestamp with time zone");
 
@@ -66,7 +63,6 @@ namespace DevInsightForge.Persistence.Migrations
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             DateJoined = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@system.local",
-                            IsEmailVerified = true,
                             LastLogin = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PasswordHash = "$2a$12$ByCcav7akmgD92OJcyegQe38aeIWvJj0wroOQjCKo0MG7nL3Yh7Qa"
                         });

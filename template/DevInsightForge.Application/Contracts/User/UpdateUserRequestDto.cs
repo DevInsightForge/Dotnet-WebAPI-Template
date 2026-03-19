@@ -4,7 +4,6 @@ public sealed class UpdateUserRequestDto
 {
     public string Email { get; set; } = string.Empty;
     public string? Password { get; set; }
-    public bool IsEmailVerified { get; set; } = false;
 }
 
 public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUserRequestDto>

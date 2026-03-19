@@ -23,9 +23,6 @@ internal class UserConfiguration : BaseEntityConfiguration<User>
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.Property(u => u.IsEmailVerified)
-            .IsRequired();
-
         builder.Property(u => u.DateJoined)
             .IsRequired();
 
@@ -37,7 +34,6 @@ internal class UserConfiguration : BaseEntityConfiguration<User>
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             Email = "admin@system.local",
             PasswordHash = "$2a$12$ByCcav7akmgD92OJcyegQe38aeIWvJj0wroOQjCKo0MG7nL3Yh7Qa",
-            IsEmailVerified = true,
             DateJoined = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             LastLogin = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
         });

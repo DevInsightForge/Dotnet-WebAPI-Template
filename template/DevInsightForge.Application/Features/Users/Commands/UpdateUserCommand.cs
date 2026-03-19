@@ -42,11 +42,6 @@ internal sealed class UpdateUserCommandHandler(
             user.SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
         }
 
-        if (request.Request.IsEmailVerified)
-        {
-            user.MarkEmailAsVerified();
-        }
-
         await unitOfWork.WithTransaction(async innerCt =>
         {
             await unitOfWork.Users.UpdateAsync(user, innerCt);

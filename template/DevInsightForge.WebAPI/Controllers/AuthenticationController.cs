@@ -31,24 +31,6 @@ public class AuthenticationController(IMediator mediator) : ControllerBase
         return result.ToNoContentActionResult();
     }
 
-    [AllowAnonymous]
-    [HttpPost("verify-email-otp")]
-    [NoContentResponse]
-    public async Task<IActionResult> VerifyEmailOtp(VerifyEmailOtpRequestDto request, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new VerifyEmailOtpCommand(request), cancellationToken);
-        return result.ToNoContentActionResult();
-    }
-
-    [AllowAnonymous]
-    [HttpPost("resend-email-otp")]
-    [NoContentResponse]
-    public async Task<IActionResult> ResendEmailVerificationOtp(ResendEmailVerificationOtpRequestDto request, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new ResendEmailVerificationOtpCommand(request), cancellationToken);
-        return result.ToNoContentActionResult();
-    }
-
     [HttpGet("authenticated-user")]
     [SuccessResponse<UserResponseDto>]
     public async Task<ActionResult<UserResponseDto>> GetCurrentUser(CancellationToken cancellationToken)
