@@ -1,8 +1,13 @@
+using System.ComponentModel;
+
 namespace DevInsightForge.Application.Contracts.Authentication;
 
 public sealed class LoginRequestDto
 {
+    [DefaultValue("admin@system.local")]
     public string Email { get; set; } = string.Empty;
+
+    [DefaultValue("Admin@123")]
     public string Password { get; set; } = string.Empty;
 }
 

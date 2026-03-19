@@ -32,7 +32,7 @@ internal sealed class GetUsersQueryHandler(
             return Result<PaginatedResponseDto<UserResponseDto>>.ValidationFailure(validationResult);
         }
 
-        var users = await unitOfWork.Users.GetAllAsync(request.PageNumber, request.PageSize);
+        var users = await unitOfWork.Users.GetAllAsync(request.PageNumber, request.PageSize, u => u.Role!);
         var response = new PaginatedResponseDto<UserResponseDto>
         {
             TotalRecords = users.TotalRecords,

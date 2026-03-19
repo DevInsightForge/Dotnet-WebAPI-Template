@@ -11,7 +11,9 @@ namespace DevInsightForge.Persistence.DataAccess;
 public class UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger) : IUnitOfWork
 {
     private readonly Lazy<IUserRepository> _users = new(() => new UserRepository(databaseContext));
+    private readonly Lazy<IRoleRepository> _roles = new(() => new RoleRepository(databaseContext));
     public IUserRepository Users => _users.Value;
+    public IRoleRepository Roles => _roles.Value;
 
     public Task<int> SaveChangesAsync(CancellationToken ct = default) =>
         databaseContext.SaveChangesAsync(ct);

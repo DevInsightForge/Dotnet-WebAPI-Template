@@ -4,6 +4,7 @@ namespace DevInsightForge.Application.Contracts.User;
 
 public sealed class CreateUserRequestDto
 {
+    public Guid RoleId { get; set; }
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }
@@ -21,6 +22,10 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .EmailAddress().WithMessage("Invalid email format.")
             .MustAsync(BeUniqueEmail).WithMessage("Email is already registered.");
 
+        RuleFor(dto => dto.RoleId)
+            .NotEqual(Guid.Empty).WithMessage("Role is required.")
+            .MustAsync(RoleExists).WithMessage("Role not found.");
+
         RuleFor(dto => dto.Password)
             .NotEmpty().WithMessage("Password is required.")
             .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
@@ -32,6 +37,11 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         return !await _unitOfWork.Users.AnyAsync(u => u.Email == normalizedEmail);
+    }
+
+    private async Task<bool> RoleExists(Guid roleId, CancellationToken cancellationToken)
+    {
+        return await _unitOfWork.Roles.AnyAsync(r => r.Id == roleId);
     }
 }
 

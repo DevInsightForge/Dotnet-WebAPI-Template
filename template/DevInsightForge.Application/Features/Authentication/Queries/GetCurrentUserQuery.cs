@@ -19,7 +19,7 @@ internal sealed class GetCurrentUserQueryHandler(
                 new Error("auth.unauthorized", "Unauthorized request.", ErrorType.Unauthorized));
         }
 
-        var user = await unitOfWork.Users.GetWhereAsync(u => u.Id == requestContext.RequestUserId);
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Id == requestContext.RequestUserId, u => u.Role!);
         if (user is null)
         {
             return Result<UserResponseDto>.Failure(

@@ -22,15 +22,6 @@ public class AuthenticationController(IMediator mediator) : ControllerBase
         return result.ToOkActionResult();
     }
 
-    [AllowAnonymous]
-    [HttpPost("register")]
-    [NoContentResponse]
-    public async Task<IActionResult> Register(RegisterRequestDto request, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new RegisterCommand(request), cancellationToken);
-        return result.ToNoContentActionResult();
-    }
-
     [HttpGet("authenticated-user")]
     [SuccessResponse<UserResponseDto>]
     public async Task<ActionResult<UserResponseDto>> GetCurrentUser(CancellationToken cancellationToken)

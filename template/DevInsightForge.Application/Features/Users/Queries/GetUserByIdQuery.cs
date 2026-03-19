@@ -11,7 +11,7 @@ internal sealed class GetUserByIdQueryHandler(
 {
     public async Task<Result<UserResponseDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.GetByIdAsync(request.UserId);
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Id == request.UserId, u => u.Role!);
         if (user is null)
         {
             return Result<UserResponseDto>.Failure(

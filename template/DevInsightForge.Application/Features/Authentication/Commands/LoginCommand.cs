@@ -27,7 +27,7 @@ internal sealed class LoginCommandHandler(
         }
 
         var normalizedEmail = request.Request.Email.Trim().ToLowerInvariant();
-        var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
+        var user = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail, u => u.Role!);
 
         if (user is null || !encryptionService.VerifyPassword(user.PasswordHash, request.Request.Password))
         {

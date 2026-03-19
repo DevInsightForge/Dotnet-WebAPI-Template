@@ -21,7 +21,7 @@ internal sealed class CreateUserCommandHandler(
             return Result<UserResponseDto>.ValidationFailure(validationResult);
         }
 
-        var user = User.Create(request.Request.Email.Trim())
+        var user = User.Create(request.Request.Email.Trim(), request.Request.RoleId)
             .SetPasswordHash(encryptionService.HashPassword(request.Request.Password));
 
         await unitOfWork.WithTransaction(async innerCt =>
@@ -30,7 +30,14 @@ internal sealed class CreateUserCommandHandler(
             await unitOfWork.SaveChangesAsync(innerCt);
         }, cancellationToken);
 
-        return Result<UserResponseDto>.Created(user.Adapt<UserResponseDto>());
+        var createdUser = await unitOfWork.Users.GetWhereAsync(u => u.Id == user.Id, u => u.Role!);
+        if (createdUser is null)
+        {
+            return Result<UserResponseDto>.Failure(
+                new Error("user.not_found", "User not found.", ErrorType.NotFound));
+        }
+
+        return Result<UserResponseDto>.Created(createdUser.Adapt<UserResponseDto>());
     }
 }
 

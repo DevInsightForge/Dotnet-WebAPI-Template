@@ -23,6 +23,7 @@ public static class QueryableExtensions
     {
         var totalRecords = await query.CountAsync();
         var data = await query
+            .OrderBy(x => x.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

@@ -28,14 +28,15 @@ internal sealed class UpdateUserCommandHandler(
         }
 
         var normalizedEmail = request.Request.Email.Trim().ToLowerInvariant();
-        var existingWithSameEmail = await unitOfWork.Users.GetWhereAsync(u => u.Email == normalizedEmail);
-        if (existingWithSameEmail is not null && existingWithSameEmail.Id != user.Id)
+        var emailInUse = await unitOfWork.Users.AnyAsync(u => u.Email == normalizedEmail && u.Id != user.Id);
+        if (emailInUse)
         {
             return Result<UserResponseDto>.Failure(
                 new Error("user.email_conflict", "Email is already registered.", ErrorType.Conflict));
         }
 
         user.SetEmail(request.Request.Email);
+        user.SetRoleId(request.Request.RoleId);
 
         if (!string.IsNullOrWhiteSpace(request.Request.Password))
         {
@@ -48,7 +49,14 @@ internal sealed class UpdateUserCommandHandler(
             await unitOfWork.SaveChangesAsync(innerCt);
         }, cancellationToken);
 
-        return Result<UserResponseDto>.Success(user.Adapt<UserResponseDto>());
+        var updatedUser = await unitOfWork.Users.GetWhereAsync(u => u.Id == user.Id, u => u.Role!);
+        if (updatedUser is null)
+        {
+            return Result<UserResponseDto>.Failure(
+                new Error("user.not_found", "User not found.", ErrorType.NotFound));
+        }
+
+        return Result<UserResponseDto>.Success(updatedUser.Adapt<UserResponseDto>());
     }
 }
 
