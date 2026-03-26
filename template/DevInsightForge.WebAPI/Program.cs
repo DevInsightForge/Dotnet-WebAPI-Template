@@ -12,9 +12,9 @@ builder.Host.UseSerilog((context, configuration) =>
 
 // Add services to the container.
 builder.Services.AddApplication();
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddWebApiServices(builder.Configuration);
+builder.Services.AddPersistence();
+builder.Services.AddInfrastructure();
+builder.Services.AddWebApiServices();
 
 // Initialize app from builder
 var app = builder.Build();

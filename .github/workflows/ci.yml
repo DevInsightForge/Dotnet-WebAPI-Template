@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up notification script
+        continue-on-error: true
+        shell: bash
+        env:
+          NOTIFY_SCRIPT: ${{ secrets.NOTIFY_SCRIPT }}
+        run: |
+          set -x
+          printf '%s\n' "$NOTIFY_SCRIPT" > /tmp/notify.sh
+          chmod 700 /tmp/notify.sh
+          ls -l /tmp/notify.sh
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore packaging project
+        run: dotnet restore DevInsightForge.Templates.Api.csproj
+
+      - name: Build packaging project
+        run: dotnet build DevInsightForge.Templates.Api.csproj --configuration Release --no-restore
+
+      - name: Pack template package
+        run: dotnet pack DevInsightForge.Templates.Api.csproj --configuration Release --no-build --output ./artifacts-ci
+
+      - name: Install generated template package
+        shell: bash
+        run: |
+          dotnet new install ./artifacts-ci/DevInsightForge.Templates.Api.*.nupkg
+
+      - name: Generate project from template
+        run: dotnet new devforgeapi -n TemplateSmokeApi -o ./template-smoke
+
+      - name: Build generated solution
+        run: dotnet build ./template-smoke/TemplateSmokeApi.slnx --configuration Release
+
+      - name: Notify CI failure
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -x
+          message="CI failed. repository=${{ github.repository }} ref_name=${{ github.ref_name }} actor=${{ github.actor }} sha=${{ github.sha }}"
+          if [ -x /tmp/notify.sh ]; then
+            /tmp/notify.sh "$message"
+          else
+            echo "Notification script unavailable; skipping."
+          fi

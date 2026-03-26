@@ -1,5 +1,4 @@
 using DevInsightForge.WebAPI.Contracts;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -12,7 +11,7 @@ public static class OpenApiExtensions
     {
         services.AddOpenApi("v1", options =>
         {
-            options.AddDocumentTransformer<JwtBearerSecurityDocumentTransformer>();
+            options.AddDocumentTransformer<DefaultDocumentTransformer>();
             options.AddOperationTransformer<ProblemDetailsOperationTransformer>();
         });
 
@@ -36,36 +35,16 @@ public static class OpenApiExtensions
     }
 }
 
-public sealed class JwtBearerSecurityDocumentTransformer : IOpenApiDocumentTransformer
+public sealed class DefaultDocumentTransformer : IOpenApiDocumentTransformer
 {
-    private const string SecuritySchemeId = JwtBearerDefaults.AuthenticationScheme;
-
     public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
     {
         document.Info = new OpenApiInfo
         {
-            Title = "DevInsightForge.API",
+            Title = "Web API",
             Version = "v1",
-            Description = "The DevInsightForge API built with ASP.NET Core, it ensures secure and efficient communication through JSON Web Tokens (JWT) for authentication."
+            Description = "Generic ASP.NET Core Web API template."
         };
-
-        document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-        document.Components.SecuritySchemes[SecuritySchemeId] = new OpenApiSecurityScheme
-        {
-            BearerFormat = "JWT",
-            Name = "JWT Authentication",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.Http,
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
-            Description = "Put **_ONLY_** your JWT Bearer token on the textbox below!"
-        };
-
-        document.Security ??= [];
-        document.Security.Add(new OpenApiSecurityRequirement
-        {
-            [new OpenApiSecuritySchemeReference(SecuritySchemeId, document, null)] = []
-        });
 
         return Task.CompletedTask;
     }

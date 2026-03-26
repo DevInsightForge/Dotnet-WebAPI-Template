@@ -2,10 +2,9 @@
   "$schema": "https://json.schemastore.org/template",
   "author": "Mofajjal Rasul",
   "name": "DevInsightForge Web API Template",
-  "description": "Template for a DevInsightForge Web API project with Clean Architecture, MediatR, EF Core, and JWT authentication.",
+  "description": "Template for a generic ASP.NET Core Web API project with clean architecture foundations.",
   "identity": "DevInsightForge.Templates.Api",
   "groupIdentity": "DevInsightForge.Templates.Api",
-  "version": "4.1.0",
   "shortName": "devforgeapi",
   "defaultName": "DevInsightForge",
   "precedence": 100,
@@ -15,8 +14,7 @@
     "Clean Architecture",
     "DDD",
     "MediatR",
-    "EF Core",
-    "JWT"
+    "EF Core"
   ],
   "tags": {
     "language": "C#",
@@ -26,7 +24,7 @@
   "preferNameDirectory": true,
   "primaryOutputs": [
     {
-      "path": "DevInsightForge.sln"
+      "path": "DevInsightForge.slnx"
     }
   ],
   "sources": [

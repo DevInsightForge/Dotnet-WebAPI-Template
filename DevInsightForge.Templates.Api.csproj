@@ -3,13 +3,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <PackageType>Template</PackageType>
     <PackageId>DevInsightForge.Templates.Api</PackageId>
-    <PackageVersion>4.1.0</PackageVersion>
+    <PackageVersion>5.0.0</PackageVersion>
     <Title>DevInsightForge Web API Template</Title>
     <Authors>Mofajjal Rasul</Authors>
-    <Description>Template for a DevInsightForge Web API project.</Description>
+    <Description>Template for a generic ASP.NET Core Web API project with clean architecture foundations.</Description>
     <PackageTags>dotnet-new;template;webapi;clean-architecture;csharp</PackageTags>
-    <PackageProjectUrl>https://github.com/DevInsightForge/DotNetDevForgeTemplate</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/DevInsightForge/DotNetDevForgeTemplate.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/DevInsightForge/Dotnet-WebAPI-Template</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DevInsightForge/Dotnet-WebAPI-Template.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>

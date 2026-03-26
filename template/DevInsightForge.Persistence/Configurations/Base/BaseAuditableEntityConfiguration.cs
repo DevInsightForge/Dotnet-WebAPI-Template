@@ -9,16 +9,6 @@ public abstract class BaseAuditableEntityConfiguration<TEntity> : BaseEntityConf
     public override void Configure(EntityTypeBuilder<TEntity> builder)
     {
         base.Configure(builder);
-
-        builder.HasOne(t => t.CreatedByUser)
-            .WithMany()
-            .HasForeignKey(t => t.CreatedByUserId)
-            .IsRequired();
-
-        builder.HasOne(t => t.ModifiedByUser)
-            .WithMany()
-            .HasForeignKey(t => t.ModifiedByUserId)
-            .IsRequired();
     }
 }
 

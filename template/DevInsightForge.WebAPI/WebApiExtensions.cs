@@ -1,8 +1,6 @@
-using DevInsightForge.Application.Abstractions.InternalServices;
 using DevInsightForge.WebAPI.Extensions;
 using DevInsightForge.WebAPI.Filters;
 using DevInsightForge.WebAPI.Routing;
-using DevInsightForge.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Serilog;
@@ -11,7 +9,7 @@ namespace DevInsightForge.WebAPI;
 
 public static class WebApiExtensions
 {
-    public static void AddWebApiServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddWebApiServices(this IServiceCollection services)
     {
         services.AddControllers(options =>
         {
@@ -22,14 +20,11 @@ public static class WebApiExtensions
 
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
-        services.AddJwtAuthentication(configuration);
         services.AddOpenApiDocumentation();
         services.AddCorsPolicy();
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-
-        services.AddScoped<IRequestContextService, HttpRequestContextService>();
     }
 
     public static void UseWebApiServices(this WebApplication app)
@@ -43,14 +38,7 @@ public static class WebApiExtensions
         app.UseHttpsRedirection();
         app.UseCors();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers()
-           .RequireAuthorization();
+        app.MapControllers();
     }
 }
-
-
-
 

@@ -7,9 +7,6 @@ public abstract class BaseAuditableEntity : BaseEntity
     public Guid? ModifiedByUserId { get; private set; }
     public DateTime ModifiedOn { get; private set; }
 
-    public virtual User? CreatedByUser { get; }
-    public virtual User? ModifiedByUser { get; }
-
     public void SetCreationAudit(Guid? createdByUserId)
     {
         if (createdByUserId is null) return;
